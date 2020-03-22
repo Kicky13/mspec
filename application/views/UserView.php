@@ -64,7 +64,7 @@
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-						<h3>Tambah Peserta Baru</h3>
+						<h3 id="headTitle">Tambah Peserta Baru</h3>
 					</div>
 					<form role="form" id="add-new-user" name="add-new-user">
 						<div class="card-body">
@@ -76,6 +76,11 @@
 									<input type="file" class="custom-file-input" id="AVATAR" name="AVATAR">
 									<label class="custom-file-label" for="excel">Choose file</label>
 								</div>
+							</div>
+							<div class="form-group" id="divUsername" hidden>
+								<label for="NAME">Username</label>
+								<input type="hidden" id="ID" name="ID" value="">
+								<input type="text" class="form-control" id="USERNAME" name="USERNAME" placeholder="Masukkan Username Peserta">
 							</div>
 							<div class="form-group">
 								<label for="NAME">Name</label>
@@ -101,6 +106,8 @@
 						<!-- /.card-body -->
 						<div class="card-footer">
 							<button type="button" id="submit" class="btn btn-primary">Submit</button>
+							<button type="button" id="update" hidden class="btn btn-success">Update</button>
+							<button type="button" id="cancel" hidden class="btn btn-danger">Cancel</button>
 						</div>
 					</form>
 				</div>
@@ -129,60 +136,139 @@
         $('#AVATAR').change(function () {
 			readURL(this);
         });
-        $('#submit').click(function () {
-            console.log('submit');
-            var inputData = {
-                "NAME": $('#NAME').val(),
-				"AVATAR": $('#AVATAR').val(),
-                "COMPANY": $('#COMPANY').val(),
-                "COMPANY_LOCATION": $('#COMPANY_LOCATION').val(),
-                "PASSWORD": $('#PASSWORD').val(),
-				"STATUS": 'ACTIVE'
-            };
-            console.log(inputData);
-            if ($('#PASSWORD').val() == $('#REPASSWORD').val()) {
-                $.ajax({
-                    type: 'POST',
-                    data: inputData,
-					dataType: 'JSON',
-                    url: '<?=base_url('User/insertPeserta'); ?>',
-                    success: function (res) {
-                        console.log(res);
-                        var id = res.id;
-                        var name = inputData.NAME;
-                        var pushData = {
-                            "ID": id,
-							"USERNAME": name.replace(/\s+/g, '').toLowerCase(),
-                            "NAME": inputData.NAME,
-                            "AVATAR": inputData.AVATAR,
-                            "COMPANY": inputData.COMPANY,
-                            "COMPANY_LOCATION": inputData.COMPANY_LOCATION,
-                            "PASSWORD": inputData.PASSWORD,
-                            "STATUS": 'ACTIVE'
-						};
+
+		$('#cancel').click(function () {
+			cancelUpdate();
+        });
+
+		$('#update').click(function () {
+			console.log('update');
+			if (validateForm('update')) {
+			    var formData = new FormData();
+                var avatar = document.getElementById('AVATAR');
+			    formData.append('NAME', $('#NAME').val());
+			    formData.append('COMPANY', $('#COMPANY').val());
+			    formData.append('COMPANY_LOCATION', $('#COMPANY_LOCATION').val());
+			    formData.append('ID', $('#ID').val());
+			    formData.append('USERNAME', $('#USERNAME').val());
+			    $('#AVATAR').val() === '' ? console.log('avatar kosong') : formData.append('AVATAR', avatar.files[0]);
+			    if ($('#PASSWORD').val() === '') {
+			        console.log('password kosong');
+				} else {
+                    if ($('#PASSWORD').val() == $('#REPASSWORD').val()) {
+                        formData.append('PASSWORD', $('#PASSWORD').val());
+                    } else {
                         Swal.fire(
-                            res.message.title,
-                            res.message.content,
-                            res.message.type
+                            'ERROR!',
+                            'Please re-type your password correctly',
+                            'error'
                         );
-                        $('#NAME').val('');
-                        $('#COMPANY').val('');
-                        $('#COMPANY_LOCATION').val('');
-                        $('#PASSWORD').val('');
-                        $('#REPASSWORD').val('');
-                        pushToData(pushData);
-                        reloadDataTable();
-                    },
-                });
+                    }
+				}
+			    updateData(formData);
 			} else {
                 Swal.fire(
                     'ERROR!',
-					'Please re-type your password correctly',
-					'error'
-				);
+                    'Please fill the form correctly',
+                    'error'
+                );
+			}
+        });
+
+        $('#submit').click(function () {
+            console.log('submit');
+            if (validateForm('submit')) {
+                var formData = new FormData();
+                var avatar = document.getElementById('AVATAR');
+                console.log(avatar.files[0]);
+                formData.append('NAME', $('#NAME').val());
+                formData.append('AVATAR', avatar.files[0]);
+                formData.append('COMPANY', $('#COMPANY').val());
+                formData.append('COMPANY_LOCATION', $('#COMPANY_LOCATION').val());
+                formData.append('PASSWORD', $('#PASSWORD').val());
+                formData.append('STATUS', 'ACTIVE');
+                console.log(formData);
+                if ($('#PASSWORD').val() == $('#REPASSWORD').val()) {
+                    submitForm(formData);
+                } else {
+                    Swal.fire(
+                        'ERROR!',
+                        'Please re-type your password correctly',
+                        'error'
+                    );
+                }
+			} else {
+                Swal.fire(
+                    'ERROR!',
+                    'Please fill insert form correctly',
+                    'error'
+                );
 			}
         });
     });
+
+    function updateData(inputData) {
+		$.ajax({
+			type: 'POST',
+			data: inputData,
+			dataType: 'JSON',
+			enctype: 'multipart/form-data',
+			processData: false,
+			contentType: false,
+			url: '<?=base_url('User/updatePeserta'); ?>',
+			success: function (res) {
+				console.log(res);
+                Swal.fire(
+                    res.message.title,
+                    res.message.content,
+                    res.message.type
+                );
+                if (res.message.type !== 'error') {
+                    window.location.reload();
+				}
+            }
+		})
+    }
+
+    function submitForm(inputData) {
+        $.ajax({
+            type: 'POST',
+            data: inputData,
+            enctype: 'multipart/form-data',
+            dataType: 'JSON',
+            processData: false,
+            contentType: false,
+            url: '<?=base_url('User/insertPeserta'); ?>',
+            success: function (res) {
+                console.log(res);
+                var item = res.data;
+                var name = item.NAME;
+                var pushData = {
+                    "ID": item.ID,
+                    "USERNAME": name.replace(/\s+/g, '').toLowerCase(),
+                    "NAME": name,
+                    "AVATAR": item.AVATAR,
+                    "COMPANY": item.COMPANY,
+                    "COMPANY_LOCATION": item.COMPANY_LOCATION,
+                    "PASSWORD": item.PASSWORD,
+                    "STATUS": 'ACTIVE'
+                };
+                Swal.fire(
+                    res.message.title,
+                    res.message.content,
+                    res.message.type
+                );
+                $('#NAME').val('');
+                $('#COMPANY').val('');
+                $('#COMPANY_LOCATION').val('');
+                $('#PASSWORD').val('');
+                $('#REPASSWORD').val('');
+                document.getElementById('AVATARVIEW').src = '';
+                pushToData(pushData);
+                reloadDataTable();
+            },
+        });
+    }
     
     function readURL(input) {
 		if (input.files && input.files[0]) {
@@ -207,6 +293,16 @@
             "info": false,
             "autoWidth": false,
         });
+    }
+
+    function validateForm(act) {
+        var validated = false;
+		if (act === 'submit') {
+		    validated = !($('#NAME').val() === '' || $('#AVATAR').val() === '' || $('#PASSWORD').val() === '');
+		} else if (act === 'update') {
+			validated = $('#NAME').val() !== '';
+		}
+		return validated;
     }
 
     function getSemuaPeserta() {
@@ -241,26 +337,65 @@
 
     function nonaktifPeserta(id) {
         $.ajax({
-            url: '<?=base_url("User/nonaktifPeserta/"); ?>' + id,
+            url: '<?=base_url("User/deletePeserta/"); ?>' + id,
             type: 'POST',
             success: function (res) {
                 console.log(res);
                 Swal.fire(
-                    'Deactivates!',
-                    'Your data has been deactivate with id ' + res,
+                    'Deleted!',
+                    'Data has been deleted',
                     'success'
-                )
+                );
+				if (res.status === 'success') {
+				    window.location.reload();
+				}
             }
         })
     }
 
-    function gotoEditPage(idPeserta) {
-        document.location.href = '<?=base_url('User/editPeserta/'); ?>' + idPeserta
+    function cancelUpdate() {
+        document.getElementById('headTitle').innerText = 'Tambah Peserta Baru';
+        document.getElementById('submit').removeAttribute('hidden');
+        document.getElementById('divUsername').setAttribute('hidden', true);
+        document.getElementById('update').setAttribute('hidden', true);
+        document.getElementById('cancel').setAttribute('hidden', true);
+        document.getElementById('AVATARVIEW').src = '';
+        document.getElementById('PASSWORD').placeholder = 'Masukkan Password untuk peserta login';
+        $('#ID').val('');
+        $('#USERNAME').val('');
+        $('#NAME').val('');
+        $('#COMPANY').val('');
+        $('#COMPANY_LOCATION').val('');
+        $('#PASSWORD').val('');
+        $('#REPASSWORD').val('');
+    }
+
+    function editData(id) {
+        document.getElementById('headTitle').innerText = 'Update Peserta';
+        var comp = document.getElementById('edit' + id);
+        var avatar = comp.getAttribute('data-avatar');
+        var company = comp.getAttribute('data-company');
+        var username = comp.getAttribute('data-username');
+        var name = comp.getAttribute('data-name');
+        var companyloc = comp.getAttribute('data-companyloc');
+        document.getElementById('AVATARVIEW').src = avatar;
+        document.getElementById('PASSWORD').placeholder = 'Masukkan Password apabila ingin mengganti password';
+        document.getElementById('update').removeAttribute('hidden');
+        document.getElementById('cancel').removeAttribute('hidden');
+        document.getElementById('divUsername').removeAttribute('hidden');
+        document.getElementById('submit').setAttribute('hidden', true);
+        $('#ID').val(id);
+        $('#USERNAME').val(username);
+        $('#NAME').val(name);
+        $('#COMPANY').val(company);
+        $('#COMPANY_LOCATION').val(companyloc);
+		console.log(company);
     }
 
     function pushToData(item) {
+        var avatar = item.AVATAR;
         var btn  = '<div class="btn-group">' +
-            '<button class="btn-info edit" onclick="gotoEditPage(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
+            '<button data-avatar="' + avatar + '" data-username="' + item.USERNAME + '" data-company="' + item.COMPANY + '" data-companyloc="' + item.COMPANY_LOCATION + '" data-name="' + item.NAME + '" class="btn-info edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
             '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ID + ')"><i class="ion-close"></i></button>' +
             '</div>';
         var temp = [
