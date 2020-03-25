@@ -4,6 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class PaketModel extends CI_Model
 {
 	protected $table = 'qsheet_master';
+	protected $package_table = 'question_package';
+	protected $soal_table = 'question_master';
+	protected $answer_table = 'qchoice_master';
 
 	public function __construct()
 	{
@@ -91,5 +94,41 @@ class PaketModel extends CI_Model
 		LEFT JOIN qchoice_master qm ON qu.ID = qm.QUESTION_ID AND qm.VALUE = 1
 		WHERE qs.ID = ' . $idPaket);
 		return $query->result();
+	}
+
+	public function deleteSoal($inputData) {
+		$this->db->where('QSHEET_ID', $inputData['PAKET_ID']);
+		$this->db->where('QUESTION_ID', $inputData['SOAL_ID']);
+		$this->db->delete($this->package_table);
+		$this->db->where('ID', $inputData['SOAL_ID']);
+		$this->db->delete($this->soal_table);
+		$message = array(
+			'title' => 'DELETED!',
+			'content' => 'Data Deleted!!!',
+			'type' => 'success'
+		);
+		$response = array(
+			'message' => $message,
+			'status' => 'success',
+		);
+		return $response;
+	}
+
+	public function answerDetail($id) {
+		$data = $this->db->query('SELECT * FROM ' . $this->answer_table . ' WHERE QUESTION_ID = ' .$id)->result();
+		$response = array(
+			'data' => $data,
+			'status' => 'success',
+		);
+		return $response;
+	}
+
+	function countPaketSoal() {
+		$total = $this->db->query('SELECT * FROM ' . $this->table)->num_rows();
+		$response = array(
+			'status' => 'success',
+			'total' => $total
+		);
+		return $response;
 	}
 }

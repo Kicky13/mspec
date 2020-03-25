@@ -29,9 +29,9 @@
 						<!-- small box -->
 						<div class="small-box bg-success">
 							<div class="inner">
-								<h3>150</h3>
+								<h3 id="paketCount">150</h3>
 
-								<p>Bank Soal</p>
+								<p>Paket Soal</p>
 							</div>
 							<div class="icon">
 								<i class="ion ion-ios-copy"></i>
@@ -44,9 +44,9 @@
 						<!-- small box -->
 						<div class="small-box bg-warning">
 							<div class="inner">
-								<h3>44</h3>
+								<h3 id="pesertaCount">44</h3>
 
-								<p>Users</p>
+								<p>Peserta</p>
 							</div>
 							<div class="icon">
 								<i class="ion ion-person-add"></i>
@@ -98,6 +98,39 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?=base_url()?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
+<script>
+	$(function () {
+		console.log('Ready');
+		countActiveUser();
+		countPaketSoal();
+    });
+    function countActiveUser() {
+        console.log('Active User');
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?=base_url('Home/countActivePeserta'); ?>',
+            success: function (res) {
+                console.log(res);
+                document.getElementById('pesertaCount').innerText = res.total;
+            }
+        });
+        setTimeout(countActiveUser, 10000);
+    }
+    function countPaketSoal() {
+        console.log('Active User');
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?=base_url('Home/countPaketSoal'); ?>',
+            success: function (res) {
+                console.log(res);
+                document.getElementById('paketCount').innerText = res.total;
+            }
+        });
+        setTimeout(countActiveUser, 10000);
+    }
+</script>
 <script src="<?=base_url()?>assets/dist/js/demo.js"></script>
 	<!-- /.content-wrapper -->
 	<?php $this->load->view('parts/footer'); ?>

@@ -97,6 +97,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal loader" id="loader-modal"></div>
 		<div class="modal fade" id="modal-default">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -115,9 +116,50 @@
 						</div>
 						<div class="modal-footer justify-content-between">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="submit" id="saveUpload" value="submit" class="btn btn-primary">Save changes</button>
+							<button type="submit" id="saveUpload" value="submit" class="btn btn-primary">Submit</button>
+							<button hidden type="submit" id="isLoading" disabled class="btn secondary">
+								<div class="spinner-border text-blue" role="status">
+									<span class="sr-only">Loading...</span>
+								</div>
+							</button>
 						</div>
 					</form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<div class="modal fade" id="modal-view">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Detail Jawaban</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<table id="tableJawaban" class="table table-bordered table-striped">
+							<thead>
+							<tr>
+								<th>Opsi</th>
+								<th>Deskripsi Jawaban</th>
+								<th>Nilai</th>
+<!--								<th>Action</th>-->
+							</tr>
+							</thead>
+							<tbody id="tbody-jawaban">
+							</tbody>
+							<tfoot>
+							<tr>
+								<th>Opsi</th>
+								<th>Deskripsi Jawaban</th>
+								<th>Nilai</th>
+<!--								<th>Action</th>-->
+							</tr>
+							</tfoot>
+						</table>
+					</div>
 				</div>
 				<!-- /.modal-content -->
 			</div>
@@ -133,7 +175,8 @@
 							</div>
 							<div class="col-6">
 								<button type="button" data-toggle="modal" data-target="#modal-default"
-										class="btn btn-success"><i class="ion-android-add"></i> Upload Soal
+										class="btn btn-success">
+									<i class="ion-android-add"></i> Upload Soal
 								</button>
 							</div>
 						</div>
@@ -146,6 +189,7 @@
 								<th>Pertanyaan</th>
 								<th>Jawaban Benar</th>
 								<th>Deskripsi Jawaban</th>
+								<th>Action</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -156,6 +200,7 @@
 								<th>Pertanyaan</th>
 								<th>Jawaban Benar</th>
 								<th>Deskripsi Jawaban</th>
+								<th>Action</th>
 							</tr>
 							</tfoot>
 						</table>
@@ -207,6 +252,10 @@
                 processData: false,
                 contentType: false,
 				data: formData,
+				beforeSend: function() {
+					document.getElementById('saveUpload').setAttribute('hidden', true);
+				    document.getElementById('isLoading').removeAttribute('hidden');
+				},
 				success: function (res) {
 					console.log(res);
 					Swal.fire(
@@ -214,7 +263,9 @@
 						res.message,
 						res.type,
 					);
-					// location.reload();
+					if (res.type === 'success') {
+					    window.location.reload();
+					}
                 }
 			});
         });
@@ -263,6 +314,7 @@
             type: 'GET',
             dataType: 'JSON',
             success: function (res) {
+                console.log(res);
                 var response = res;
                 response.forEach(pushToDataSoal);
                 reloadDataTable();
@@ -340,16 +392,85 @@
     }
     function pushToDataSoal(item) {
         var btn = '<div class="btn-group">' +
-            // '<button class="btn-info edit" onclick="gotoEditPage(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
-            // '<button class="btn-danger deleteButton" onclick="onClickDelete(' + item.ID + ')"><i class="ion-close"></i></button>' +
+            '<button class="btn-info" onclick="answerDetail(' + item.QUESTION_ID + ')"><i class="ion-eye"></i></button>' +
+            '<button class="btn-danger" onclick="onclickDeleteSoal(' + item.QUESTION_ID + ')"><i class="ion-close"></i></button>' +
             '</div>';
         var temp = [
             item.SHEET_NO,
             item.CONTENT,
             item.ALPHA,
             item.ANSWER_TEXT,
+			btn,
         ];
         data.push(temp);
+    }
+
+    function onclickDeleteSoal(id) {
+        Swal.fire({
+            title: 'Are You Sure?',
+            text: 'You won\'t able to revert this',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it'
+        }).then(res => {
+            if (res.value) {
+                var formData = new FormData();
+                console.log(id + ':' + $('#idPaket').val());
+                formData.append('SOAL_ID', id);
+                formData.append('PAKET_ID', $('#idPaket').val());
+                deleteSoal(formData);
+            }
+        });
+    }
+
+    function deleteSoal(inputData) {
+        $.ajax({
+            url: '<?=base_url("Soal/deleteSoal"); ?>',
+            type: 'POST',
+            data: inputData,
+            dataType: 'JSON',
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                console.log(res);
+                Swal.fire(
+                    'Deleted!',
+                    'Data has been deleted',
+                    'success'
+                );
+                if (res.status === 'success') {
+                    window.location.reload();
+                }
+            }
+        });
+    }
+
+	function answerDetail(id) {
+        $.ajax({
+            url: '<?=base_url("Soal/answerDetail/"); ?>' + id,
+            type: 'POST',
+			dataType: 'JSON',
+            success: function (res) {
+                if (res.status === 'success') {
+                    var body = '';
+                    var data = res.data;
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        var nilai = data[i].VALUE == 0 ? 'FALSE' : 'TRUE';
+                        body += '<tr>';
+                        body += '<td>' + data[i].ALPHA + '</td>';
+                        body += '<td>' + data[i].ANSWER_TEXT + '</td>';
+                        body += '<td>' + nilai + '</td>';
+						body += '</tr>';
+					}
+                    document.getElementById('tbody-jawaban').innerHTML = body;
+                    $('#modal-view').modal('show');
+				}
+            }
+        })
     }
 </Script>
 <!-- /.content-wrapper -->

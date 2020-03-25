@@ -148,4 +148,13 @@ class UserModel extends CI_Model {
 		);
 		return $response;
 	}
+
+	function countActivePeserta() {
+		$total = $this->db->query('SELECT * FROM ' . $this->table . ' WHERE STATUS = "ACTIVE"')->num_rows();
+		$response = array(
+			'status' => 'success',
+			'total' => $total
+		);
+		return $response;
+	}
 }

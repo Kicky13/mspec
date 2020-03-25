@@ -87,7 +87,7 @@ class Soal extends CI_Controller {
 			$idSoal = 0;
 			for ($i = 2; $i <= $highestRow; $i++) {
 				$content = $workSheet->getCell('B' . $i)->getValue();
-				if ($content !== $prevSoal && $content !== null) {
+				if ($content != null) {
 					$this->db->set('CONTENT', $content);
 					$this->db->insert('question_master');
 					$idSoal = $this->db->insert_id();
@@ -100,7 +100,7 @@ class Soal extends CI_Controller {
 				}
 				$option = $workSheet->getCell('C' . $i)->getValue();
 				$jawaban= $workSheet->getCell('D' . $i)->getValue();
-				$value = ($workSheet->getCell('E' . $i)->getValue() == null) ? 0 : 1;
+				$value = ($workSheet->getCell('E' . $i)->getValue() === null || $workSheet->getCell('E' . $i)->getValue() == '') ? 0 : 1;
 				$insertJawaban = array(
 					'QUESTION_ID' => $idSoal,
 					'ALPHA' => $option,
@@ -123,5 +123,67 @@ class Soal extends CI_Controller {
 			);
 		}
 		echo json_encode($response);
+	}
+
+	public function uploadSoalTest($id) {
+		$file = $_FILES['uploaded']['name'];
+		$config['file_name'] = $file;
+		$config['upload_path']          = './uploads/';
+		$config['allowed_types']        = 'xls|xlsx';
+		$config['max_size']             = 100000;
+		$config['overwrite']			= true;
+		$this->load->library('upload', $config);
+		if ($this->upload->do_upload('uploaded')) {
+			$path = './uploads/' . $this->upload->data('client_name');
+			$reader = new PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			$spreadSheet = $reader->load($path);
+			$workSheet = $spreadSheet->getActiveSheet();
+			$highestRow = $workSheet->getHighestRow();
+			$paketSoal = array();
+			$prevSoal = '';
+			$idSoal = 0;
+			for ($i = 2; $i <= $highestRow; $i++) {
+				$content = $workSheet->getCell('B' . $i)->getValue();
+				if ($content != null) {
+					$paket = array(
+						'QUESTION_ID' => $content
+					);
+					array_push($paketSoal, $paket);
+					$prevSoal = $content;
+				}
+				$option = $workSheet->getCell('C' . $i)->getValue();
+				$jawaban= $workSheet->getCell('D' . $i)->getValue();
+				$value = ($workSheet->getCell('E' . $i)->getValue() === null || $workSheet->getCell('E' . $i)->getValue() == '') ? 0 : 1;
+				$insertJawaban = array(
+					'QUESTION_ID' => $idSoal,
+					'ALPHA' => $option,
+					'ANSWER_TEXT' => $jawaban,
+					'VALUE' => $value
+				);
+			}
+			$response = array(
+				'type' => 'error',
+				'title' => 'SUCCESS',
+				'message' => 'Successfully uploded document',
+				'data' => $paketSoal
+			);
+		} else {
+			$response = array(
+				'type' => 'error',
+				'title' => 'ERROR',
+				'message' => $this->upload->display_errors()
+			);
+		}
+		echo json_encode($response);
+	}
+
+	function deleteSoal() {
+		$data = $this->paket->deleteSoal($this->input->post());
+		echo json_encode($data);
+	}
+
+	function answerDetail($id) {
+		$data = $this->paket->answerDetail($id);
+		echo json_encode($data);
 	}
 }
