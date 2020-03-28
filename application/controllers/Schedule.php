@@ -7,10 +7,15 @@ class Schedule extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->library('encryption');
-		$this->load->model('LoginModel', 'login');
+		$this->load->model('ScheduleModel', 'event');
 	}
 
 	function index() {
 		$this->load->view('ScheduleView');
+	}
+
+	function examiner() {
+		$data = $this->event->examiner();
+		echo json_encode($data);
 	}
 }

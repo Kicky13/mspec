@@ -77,12 +77,12 @@
 							<div class="inner">
 								<h3>75</h3>
 
-								<p>Exams Schedule</p>
+								<p>Jadwal Ujian</p>
 							</div>
 							<div class="icon">
 								<i class="ion ion-ios-calendar"></i>
 							</div>
-							<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+							<a href="<?=base_url('Schedule'); ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 				</div>

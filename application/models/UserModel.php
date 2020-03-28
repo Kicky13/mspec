@@ -21,7 +21,7 @@ class UserModel extends CI_Model {
 		$username = str_replace(' ', '', strtolower($data['NAME']));
 		$dataUser = array(
 			'USERNAME' => $username,
-			'PASSWORD' => $data['PASSWORD'],
+			'PASSWORD' => $this->encryption->encrypt($data['PASSWORD']),
 			'NAME' => $data['NAME'],
 			'ROLE' => 'PESERTA'
 		);
@@ -102,7 +102,7 @@ class UserModel extends CI_Model {
 				$updateUser['USERNAME'] = $inputData['USERNAME'];
 			}
 			if (isset($inputData['PASSWORD'])) {
-				$updateUser['PASSWORD'] = $inputData['PASSWORD'];
+				$updateUser['PASSWORD'] = $this->encryption->encrypt($inputData['PASSWORD']);
 			}
 			if (isset($updateUser['USERNAME']) || isset($updateUser['PASSWORD'])) {
 				$this->db->where('ID', $peserta['USER_ID'])->update($this->userTable, $updateUser);
