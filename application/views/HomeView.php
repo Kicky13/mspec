@@ -75,7 +75,7 @@
 						<!-- small box -->
 						<div class="small-box bg-info">
 							<div class="inner">
-								<h3>75</h3>
+								<h3 id="ujianCount">75</h3>
 
 								<p>Jadwal Ujian</p>
 							</div>
@@ -103,6 +103,7 @@
 		console.log('Ready');
 		countActiveUser();
 		countPaketSoal();
+		countUjian();
     });
     function countActiveUser() {
         console.log('Active User');
@@ -113,6 +114,19 @@
             success: function (res) {
                 console.log(res);
                 document.getElementById('pesertaCount').innerText = res.total;
+            }
+        });
+        setTimeout(countActiveUser, 10000);
+    }
+    function countUjian() {
+        console.log('Active User');
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '<?=base_url('Home/countUjianPeserta'); ?>',
+            success: function (res) {
+                console.log(res);
+                document.getElementById('ujianCount').innerText = res.total;
             }
         });
         setTimeout(countActiveUser, 10000);

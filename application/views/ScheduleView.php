@@ -37,6 +37,7 @@
 								<th>Tanggal</th>
 								<th>Jam Masuk / Jam Selesai</th>
 								<th>Nama Penguji</th>
+								<th>Action</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -48,6 +49,7 @@
 								<th>Tanggal</th>
 								<th>Jam Masuk / Jam Selesai</th>
 								<th>Nama Penguji</th>
+								<th>Action</th>
 							</tr>
 							</tfoot>
 						</table>
@@ -84,8 +86,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="NDE_LEVEL">Jam Mulai</label>
-										<div class="input-group date" id="EVENT_START" data-target-input="nearest">
-											<input type="text" class="form-control datetimepicker-input" data-target="#EVENT_START"/>
+										<div class="input-group date" id="EVENT_START_T" data-target-input="nearest">
+											<input type="text" id="EVENT_START" name="EVENT_START" placeholder="Klik tombol jam disebelah kanan untuk mengisi" class="form-control datetimepicker-input" data-target="#EVENT_START"/>
 											<div class="input-group-append" data-target="#EVENT_START" data-toggle="datetimepicker">
 												<div class="input-group-text"><i class="far fa-clock"></i></div>
 											</div>
@@ -95,8 +97,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="DURATION">Jam Selesai</label>
-										<div class="input-group date" id="EVENT_END" data-target-input="nearest">
-											<input type="text" class="form-control datetimepicker-input" data-target="#EVENT_END"/>
+										<div class="input-group date" id="EVENT_END_T" data-target-input="nearest">
+											<input type="text" id="EVENT_END" name="EVENT_END" placeholder="Klik tombol jam disebelah kanan untuk mengisi" class="form-control datetimepicker-input" data-target="#EVENT_END"/>
 											<div class="input-group-append" data-target="#EVENT_END" data-toggle="datetimepicker">
 												<div class="input-group-text"><i class="far fa-clock"></i></div>
 											</div>
@@ -108,6 +110,8 @@
 						<!-- /.card-body -->
 						<div class="card-footer">
 							<button type="button" id="submit" class="btn btn-primary">Submit</button>
+							<button type="button" hidden id="update" class="btn btn-success">Update</button>
+							<button type="button" hidden id="cancel" class="btn btn-danger">Cancel</button>
 						</div>
 					</form>
 				</div>
@@ -163,26 +167,16 @@
             console.log('update');
             if (validateForm('update')) {
                 var formData = new FormData();
-                var avatar = document.getElementById('AVATAR');
-                formData.append('NAME', $('#NAME').val());
-                formData.append('COMPANY', $('#COMPANY').val());
-                formData.append('COMPANY_LOCATION', $('#COMPANY_LOCATION').val());
-                formData.append('ID', $('#ID').val());
-                formData.append('USERNAME', $('#USERNAME').val());
-                $('#AVATAR').val() === '' ? console.log('avatar kosong') : formData.append('AVATAR', avatar.files[0]);
-                if ($('#PASSWORD').val() === '') {
-                    console.log('password kosong');
-                } else {
-                    if ($('#PASSWORD').val() == $('#REPASSWORD').val()) {
-                        formData.append('PASSWORD', $('#PASSWORD').val());
-                    } else {
-                        Swal.fire(
-                            'ERROR!',
-                            'Please re-type your password correctly',
-                            'error'
-                        );
-                    }
-                }
+                var selected = document.getElementById('EXAMINER');
+                var penguji = selected.options[selected.selectedIndex].value;
+                var id = $(this).attr('data-id');
+                console.log(id);
+                formData.append('EVENT_TITLE', $('#EVENT_TITLE').val());
+                formData.append('EVENT_DATE', $('#EVENT_DATE').val());
+                formData.append('EVENT_START', $('#EVENT_START').val());
+                formData.append('EVENT_END', $('#EVENT_END').val());
+                formData.append('EXAMINER', penguji);
+                formData.append('ID', id);
                 updateData(formData);
             } else {
                 Swal.fire(
@@ -197,24 +191,14 @@
             console.log('submit');
             if (validateForm('submit')) {
                 var formData = new FormData();
-                var avatar = document.getElementById('AVATAR');
-                console.log(avatar.files[0]);
-                formData.append('NAME', $('#NAME').val());
-                formData.append('AVATAR', avatar.files[0]);
-                formData.append('COMPANY', $('#COMPANY').val());
-                formData.append('COMPANY_LOCATION', $('#COMPANY_LOCATION').val());
-                formData.append('PASSWORD', $('#PASSWORD').val());
-                formData.append('STATUS', 'ACTIVE');
-                console.log(formData);
-                if ($('#PASSWORD').val() == $('#REPASSWORD').val()) {
-                    submitForm(formData);
-                } else {
-                    Swal.fire(
-                        'ERROR!',
-                        'Please re-type your password correctly',
-                        'error'
-                    );
-                }
+                var selected = document.getElementById('EXAMINER');
+                var penguji = selected.options[selected.selectedIndex].value;
+                formData.append('EVENT_TITLE', $('#EVENT_TITLE').val());
+                formData.append('EVENT_DATE', $('#EVENT_DATE').val());
+                formData.append('EVENT_START', $('#EVENT_START').val());
+                formData.append('EVENT_END', $('#EVENT_END').val());
+                formData.append('EXAMINER', penguji);
+                submitForm(formData);
             } else {
                 Swal.fire(
                     'ERROR!',
@@ -233,7 +217,7 @@
             enctype: 'multipart/form-data',
             processData: false,
             contentType: false,
-            url: '<?=base_url('User/updatePeserta'); ?>',
+            url: '<?=base_url('Schedule/updateSchedule'); ?>',
             success: function (res) {
                 console.log(res);
                 Swal.fire(
@@ -257,7 +241,7 @@
 				console.log(res);
 				var examinerOpt = '<option selected="selected" disabled>Please Select one</option>';
 				$.each(res.data, function (index, value) {
-					examinerOpt += '<option value="' + value.ID + '">' + value.NAME + '</option>';
+					examinerOpt += '<option value="' + value.ID + '-' + value.NAME + '">' + value.NAME + '</option>';
                 });
 				document.getElementById('EXAMINER').innerHTML = examinerOpt;
             }
@@ -268,52 +252,36 @@
         $.ajax({
             type: 'POST',
             data: inputData,
-            enctype: 'multipart/form-data',
             dataType: 'JSON',
             processData: false,
             contentType: false,
-            url: '<?=base_url('User/insertPeserta'); ?>',
+            url: '<?=base_url('Schedule/insertJadwalTest'); ?>',
             success: function (res) {
                 console.log(res);
                 var item = res.data;
-                var name = item.NAME;
                 var pushData = {
                     "ID": item.ID,
-                    "USERNAME": name.replace(/\s+/g, '').toLowerCase(),
-                    "NAME": name,
-                    "AVATAR": item.AVATAR,
-                    "COMPANY": item.COMPANY,
-                    "COMPANY_LOCATION": item.COMPANY_LOCATION,
-                    "PASSWORD": item.PASSWORD,
-                    "STATUS": 'ACTIVE'
+                    "EVENT_TITLE": item.EVENT_TITLE,
+                    "EVENT_DATE": item.EVENT_DATE,
+                    "EVENT_START": addSecond(item.EVENT_START),
+                    "EVENT_END": addSecond(item.EVENT_END),
+					"ID_PENGUJI": item.ID_PENGUJI,
+					"NAMA_PENGUJI": item.NAMA_PENGUJI,
+					"ENCODE": item.ENCODE,
                 };
                 Swal.fire(
                     res.message.title,
                     res.message.content,
                     res.message.type
                 );
-                $('#NAME').val('');
-                $('#COMPANY').val('');
-                $('#COMPANY_LOCATION').val('');
-                $('#PASSWORD').val('');
-                $('#REPASSWORD').val('');
-                document.getElementById('AVATARVIEW').src = '';
+                $('#EVENT_TITLE').val('');
+                $('#EVENT_DATE').val('');
+                $('#EVENT_START').val('');
+                $('#EVENT_END').val('');
                 pushToData(pushData);
                 reloadDataTable();
             },
         });
-    }
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#AVATARVIEW').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
     }
 
     function reloadDataTable() {
@@ -331,10 +299,12 @@
 
     function validateForm(act) {
         var validated = false;
+        var selected = document.getElementById('EXAMINER');
+        var penguji = selected.options[selected.selectedIndex].value;
         if (act === 'submit') {
-            validated = !($('#NAME').val() === '' || $('#AVATAR').val() === '' || $('#PASSWORD').val() === '');
+            validated = !($('#EXAMINER').val() === '' || $('#EVENT_TITLE').val() === '' || $('#EVENT_DATE').val() === '' || $('#EVENT_START').val() === '' || $('#EVENT_END').val() === '' || typeof penguji === 'undefined' || penguji === '' || penguji == null);
         } else if (act === 'update') {
-            validated = $('#NAME').val() !== '';
+            validated = !($('#EXAMINER').val() === '' || $('#EVENT_TITLE').val() === '' || $('#EVENT_DATE').val() === '' || $('#EVENT_START').val() === '' || $('#EVENT_END').val() === '' || typeof penguji === 'undefined' || penguji === '' || penguji == null);
         }
         return validated;
     }
@@ -345,7 +315,7 @@
             type: 'GET',
             dataType: 'JSON',
             success: function (res) {
-                var response = res;
+                var response = res.data;
                 response.forEach(pushToData);
                 reloadDataTable();
             }
@@ -388,56 +358,74 @@
     }
 
     function cancelUpdate() {
-        document.getElementById('headTitle').innerText = 'Tambah Peserta Baru';
         document.getElementById('submit').removeAttribute('hidden');
-        document.getElementById('divUsername').setAttribute('hidden', true);
+        document.getElementById('update').removeAttribute('data-id');
         document.getElementById('update').setAttribute('hidden', true);
         document.getElementById('cancel').setAttribute('hidden', true);
-        document.getElementById('AVATARVIEW').src = '';
-        document.getElementById('PASSWORD').placeholder = 'Masukkan Password untuk peserta login';
-        $('#ID').val('');
-        $('#USERNAME').val('');
-        $('#NAME').val('');
-        $('#COMPANY').val('');
-        $('#COMPANY_LOCATION').val('');
-        $('#PASSWORD').val('');
-        $('#REPASSWORD').val('');
+        $('#EVENT_END').val('');
+        $('#EVENT_START').val('');
+        $('#EVENT_TITLE').val('');
+        $('#EVENT_DATE').val('');
+    }
+
+    function gotoPesertaList(encode) {
+        document.location.href = '<?=base_url('Schedule/editEventPage/'); ?>' + encode;
     }
 
     function editData(id) {
-        document.getElementById('headTitle').innerText = 'Update Peserta';
-        var comp = document.getElementById('edit' + id);
-        var avatar = comp.getAttribute('data-avatar');
-        var company = comp.getAttribute('data-company');
-        var username = comp.getAttribute('data-username');
-        var name = comp.getAttribute('data-name');
-        var companyloc = comp.getAttribute('data-companyloc');
-        document.getElementById('AVATARVIEW').src = avatar;
-        document.getElementById('PASSWORD').placeholder = 'Masukkan Password apabila ingin mengganti password';
-        document.getElementById('update').removeAttribute('hidden');
-        document.getElementById('cancel').removeAttribute('hidden');
-        document.getElementById('divUsername').removeAttribute('hidden');
-        document.getElementById('submit').setAttribute('hidden', true);
-        $('#ID').val(id);
-        $('#USERNAME').val(username);
-        $('#NAME').val(name);
-        $('#COMPANY').val(company);
-        $('#COMPANY_LOCATION').val(companyloc);
-        console.log(company);
+		var title =  $('#edit' + id).attr('data-title');
+		var evdate = $('#edit' + id).attr('data-date');
+		var starttime = $('#edit' + id).attr('data-starttime');
+		var endtime = $('#edit' + id).attr('data-endtime');
+		var penguji = $('#edit' + id).attr('data-penguji') + '-' + $('#edit' + id).attr('data-namapenguji');
+		console.log(endtime.slice(5));
+		$('#EVENT_TITLE').val(title);
+		$('#EVENT_DATE').val(dateFormatter(evdate));
+		$('#EVENT_START').val(timeFormatterAMPM(starttime));
+		$('#EVENT_END').val(timeFormatterAMPM(endtime));
+		document.getElementById('EXAMINER').value = penguji;
+		document.getElementById('update').removeAttribute('hidden');
+		document.getElementById('update').setAttribute('data-id', id);
+		document.getElementById('submit').setAttribute('hidden', true);
+		document.getElementById('cancel').removeAttribute('hidden');
+    }
+
+    function dateFormatter(date) {
+        var year = date.substr(0, 4);
+        var month = date.substr(5, 2);
+        var day = date.slice(-2);
+        return newdate = day + '/' + month + '/' + year;
+    }
+
+    function addSecond(time) {
+		return time + ':00';
+    }
+
+    function timeFormatterAMPM(time) {
+        var hour = time.substr(0, 2);
+        var min = time.substr(3, 2);
+		if (hour > 12) {
+		    hour = hour - 12;
+		    var mode = 'PM';
+		} else {
+		    var mode = 'AM';
+		}
+		return hour + ':' + min + ' ' + mode;
     }
 
     function pushToData(item) {
-        var avatar = item.AVATAR;
         var btn  = '<div class="btn-group">' +
-            '<button data-avatar="' + avatar + '" data-username="' + item.USERNAME + '" data-company="' + item.COMPANY + '" data-companyloc="' + item.COMPANY_LOCATION + '" data-name="' + item.NAME + '" class="btn-info edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
-            '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ID + ')"><i class="ion-close"></i></button>' +
+            '<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-id="' + item.ID + '" class="btn-info edit" id="look' + item.ID + '" onclick="gotoPesertaList(' + item.ID + ')"><i class="ion-person"></i></button>' +
+            '<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-id="' + item.ID + '" class="btn-success edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
+            '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ENCODE + ')"><i class="ion-close"></i></button>' +
             '</div>';
+        var time = item.EVENT_START + ' / ' + item.EVENT_END;
         var temp = [
-            item.USERNAME,
-            item.NAME,
-            item.COMPANY,
-            item.COMPANY_LOCATION,
-            item.STATUS,
+            item.ENCODE,
+            item.EVENT_TITLE,
+            item.EVENT_DATE,
+            time,
+            item.NAMA_PENGUJI,
             btn,
         ];
         data.push(temp);

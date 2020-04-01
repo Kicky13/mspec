@@ -6,7 +6,8 @@ class Home extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('UserModel', 'user')
-			->model('PaketModel', 'paket');
+			->model('PaketModel', 'paket')
+			->model('ScheduleModel', 'ujian');
 	}
 
 	public function index() {
@@ -20,6 +21,11 @@ class Home extends CI_Controller {
 
 	public function countPaketSoal() {
 		$data = $this->paket->countPaketSoal();
+		echo json_encode($data);
+	}
+
+	public function countUjianPeserta() {
+		$data = $this->ujian->countUjianPeserta();
 		echo json_encode($data);
 	}
 }
