@@ -6,11 +6,21 @@ class API extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('encryption');
 		$this->load->model('APIModel', 'api');
 	}
 
 	function doLogin() {
 		$data = $this->api->dologin($this->input->post());
+		echo json_encode($data);
+	}
+
+	function getTestInfo() {
+	    $data = $this->api->getTestInfo($this->input->post());
+	    echo json_encode($data);
+    }
+
+    function submitLjk() {
+		$data = $this->api->submitLjk($this->input->post());
+		echo json_encode($data);
 	}
 }
