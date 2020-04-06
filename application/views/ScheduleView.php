@@ -170,7 +170,7 @@
                 var selected = document.getElementById('EXAMINER');
                 var penguji = selected.options[selected.selectedIndex].value;
                 var id = $(this).attr('data-id');
-                console.log(id);
+                console.log(penguji);
                 formData.append('EVENT_TITLE', $('#EVENT_TITLE').val());
                 formData.append('EVENT_DATE', $('#EVENT_DATE').val());
                 formData.append('EVENT_START', $('#EVENT_START').val());
@@ -341,7 +341,7 @@
 
     function nonaktifPeserta(id) {
         $.ajax({
-            url: '<?=base_url("User/deletePeserta/"); ?>' + id,
+            url: '<?=base_url("Schedule/deleteSchedule/"); ?>' + id,
             type: 'POST',
             success: function (res) {
                 console.log(res);
@@ -350,9 +350,9 @@
                     'Data has been deleted',
                     'success'
                 );
-                if (res.status === 'success') {
+                // if (res.message.type == 'success') {
                     window.location.reload();
-                }
+                // }
             }
         })
     }
@@ -417,7 +417,7 @@
         var btn  = '<div class="btn-group">' +
             '<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-id="' + item.ID + '" class="btn-info edit" id="look' + item.ID + '" onclick="gotoPesertaList(' + item.ID + ')"><i class="ion-person"></i></button>' +
             '<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-id="' + item.ID + '" class="btn-success edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
-            '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ENCODE + ')"><i class="ion-close"></i></button>' +
+            '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ID + ')"><i class="ion-close"></i></button>' +
             '</div>';
         var time = item.EVENT_START + ' / ' + item.EVENT_END;
         var temp = [

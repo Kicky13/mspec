@@ -159,6 +159,35 @@ class ScheduleModel extends CI_Model {
 		return $response;
 	}
 
+	function updateJadwalTest($data) {
+		$startTime = $this->timeFormat($data['EVENT_START']);
+		$endTime = $this->timeFormat($data['EVENT_END']);
+		$penguji = explode('-', $data['EXAMINER']);
+		$date = $this->dateFormat($data['EVENT_DATE']);
+		$id = $data['ID'];
+		$inputData = array(
+			"EVENT_TITLE" => $data['EVENT_TITLE'],
+			"EVENT_DATE" => $date,
+			"EVENT_START" => $startTime,
+			"EVENT_END" => $endTime,
+			"EXAMINER_ID" => $penguji[0]
+		);
+		$update = $this->db->where('ID', $id)->update($this->table, $inputData);
+		if ($update) {
+			$message = array(
+				"title" => "SUCCESS",
+				"content" => "Data berhasil di inputkan",
+				"type" => "success"
+			);
+		}
+		$response = array(
+			"status" => 200,
+			"message" => $message,
+			"data" => $inputData
+		);
+		return $response;
+	}
+
 	function timeFormat($time) {
 		$count = strlen($time);
 		$ampm = substr($time, -2);
@@ -196,6 +225,30 @@ class ScheduleModel extends CI_Model {
 			"status" => 200,
 			"message" => "Success",
 			"total" => $total
+		);
+		return $response;
+	}
+
+	function deleteJadwalTest($id) {
+		$message = array(
+			"title" => "ERROR!",
+			"content" => "Unknown Error",
+			"type" => "error"
+		);
+		$deleteChild = $this->db->where('EVENT_ID', $id)->delete($this->abs);
+		if ($deleteChild) {
+			$delete = $this->db->where('ID', $id)->delete($this->table);
+			if ($delete) {
+				$message = array(
+					"title" => "SUCCESS",
+					"content" => "Data berhasil di inputkan",
+					"type" => "success"
+				);
+			}
+		}
+		$response = array(
+			"status" => 200,
+			"message" => $message,
 		);
 		return $response;
 	}

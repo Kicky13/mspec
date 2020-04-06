@@ -47,4 +47,14 @@ class Schedule extends CI_Controller {
 		$data = $this->event->deletePesertaUjian($id);
 		echo json_encode($data);
 	}
+
+	function updateSchedule() {
+		$data = $this->event->updateJadwalTest($this->input->post());
+		echo json_encode($data);
+	}
+
+	function deleteSchedule($id) {
+		$data = $this->event->deleteJadwalTest($id);
+		echo json_encode($data);
+	}
 }
