@@ -32,19 +32,19 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="pages/charts/chartjs.html" class="nav-link">
+							<a href="<?=base_url('Soal'); ?>" class="nav-link">
 								<i class="ion ion-clipboard nav-icon"></i>
 								<p>Create Soal</p>
 							</a>
 						</li>
+<!--						<li class="nav-item">-->
+<!--							<a href="pages/charts/flot.html" class="nav-link">-->
+<!--								<i class="ion ion-android-create nav-icon"></i>-->
+<!--								<p>Insert Pertanyaan</p>-->
+<!--							</a>-->
+<!--						</li>-->
 						<li class="nav-item">
-							<a href="pages/charts/flot.html" class="nav-link">
-								<i class="ion ion-android-create nav-icon"></i>
-								<p>Insert Pertanyaan</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="pages/charts/inline.html" class="nav-link">
+							<a href="<?=base_url('User/admin'); ?>" class="nav-link">
 								<i class="ion ion-person-add nav-icon"></i>
 								<p>Add User</p>
 							</a>

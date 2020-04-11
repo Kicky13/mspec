@@ -34,10 +34,8 @@
 							<tr>
 								<th>Username</th>
 								<th>Name</th>
-								<th>Company</th>
-								<th>Company Location</th>
-								<th>Email</th>
-								<th>Status</th>
+								<th>Role</th>
+								<th>Last Login</th>
 								<th>Action</th>
 							</tr>
 							</thead>
@@ -47,10 +45,8 @@
 							<tr>
 								<th>Username</th>
 								<th>Name</th>
-								<th>Company</th>
-								<th>Company Location</th>
-								<th>Email</th>
-								<th>Status</th>
+								<th>Role</th>
+								<th>Last Login</th>
 								<th>Action</th>
 							</tr>
 							</tfoot>
@@ -66,19 +62,10 @@
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-						<h3 id="headTitle">Tambah Peserta Baru</h3>
+						<h3 id="headTitle">Tambah Admin/Penguji Baru</h3>
 					</div>
 					<form role="form" id="add-new-user" name="add-new-user">
 						<div class="card-body">
-							<div class="text-center">
-								<img class="profile-user-img img-fluid img-circle" src="" name="AVATARVIEW" id="AVATARVIEW" width="300" height="300">
-							</div>
-							<div class="form-group">
-								<div class="custom-file">
-									<input type="file" class="custom-file-input" id="AVATAR" name="AVATAR">
-									<label class="custom-file-label" for="excel">Choose file</label>
-								</div>
-							</div>
 							<div class="form-group" id="divUsername" hidden>
 								<label for="NAME">Username</label>
 								<input type="hidden" id="ID" name="ID" value="">
@@ -89,16 +76,12 @@
 								<input type="text" class="form-control" id="NAME" name="NAME" placeholder="Masukkan Nama Peserta">
 							</div>
 							<div class="form-group">
-								<label for="COMPANY">Company Name</label>
-								<input type="text" class="form-control" id="COMPANY" name="COMPANNY" placeholder="Masukkan Nama Company, Bisa dikosongi apabila tidak diperlukan">
-							</div>
-							<div class="form-group">
-								<label for="COMPANY_LOCATION">Company Address</label>
-								<input type="text" class="form-control" id="COMPANY_LOCATION" name="COMPANY_LOCATION" placeholder="Masukkan Alamat Company">
-							</div>
-							<div class="form-group">
-								<label for="EMAIL">Email</label>
-								<input type="email" class="form-control" id="EMAIL" name="EMAIL" placeholder="Masukkan Email">
+								<label>Role</label>
+								<select id="ROLE" name="ROLE" class="form-control select2bs4">
+									<option selected="selected" disabled>Please Select one</option>
+									<option value="ADMIN">ADMIN</option>
+									<option value="PENGUJI">PENGUJI</option>
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="PASSWORD">Login Password</label>
@@ -124,44 +107,43 @@
 	<!-- /.content -->
 </div>
 
-<script src="<?= base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
-<script src="<?= base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="<?= base_url() ?>assets/plugins/datatables/jquery.dataTables.js"></script>
-<script src="<?= base_url() ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
-<script src="<?= base_url() ?>assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-<script src="<?= base_url() ?>assets/dist/js/adminlte.js"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+<link rel="stylesheet" href="<?=base_url()?>assets/plugins/select2/css/select2.min.css">
+<script src="<?=base_url()?>assets/plugins/jquery/jquery.min.js"></script>
+<script src="<?=base_url()?>assets/plugins/select2/js/select2.full.min.js"></script>
+<script src="<?=base_url()?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?=base_url()?>assets/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="<?=base_url()?>assets/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+<script src="<?=base_url()?>assets/plugins/datatables/jquery.dataTables.js"></script>
+<script src="<?=base_url()?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<script src="<?=base_url()?>assets/dist/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?= base_url() ?>assets/dist/js/pages/dashboard.js"></script>
+<script src="<?=base_url()?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="<?= base_url() ?>assets/dist/js/demo.js"></script>
+<script src="<?=base_url()?>assets/dist/js/demo.js"></script>
 
 <Script>
     var data = [];
     $(function () {
         getSemuaPeserta();
-        $('#AVATAR').change(function () {
-			readURL(this);
+
+        $('#cancel').click(function () {
+            cancelUpdate();
         });
 
-		$('#cancel').click(function () {
-			cancelUpdate();
-        });
-
-		$('#update').click(function () {
-			console.log('update');
-			if (validateForm('update')) {
-			    var formData = new FormData();
-                var avatar = document.getElementById('AVATAR');
-			    formData.append('NAME', $('#NAME').val());
-			    formData.append('COMPANY', $('#COMPANY').val());
-			    formData.append('COMPANY_LOCATION', $('#COMPANY_LOCATION').val());
-			    formData.append('ID', $('#ID').val());
-			    formData.append('EMAIL', $('#EMAIL').val());
-			    formData.append('USERNAME', $('#USERNAME').val());
-			    $('#AVATAR').val() === '' ? console.log('avatar kosong') : formData.append('AVATAR', avatar.files[0]);
-			    if ($('#PASSWORD').val() === '') {
-			        console.log('password kosong');
-				} else {
+        $('#update').click(function () {
+            console.log('update');
+            if (validateForm('update')) {
+                var formData = new FormData();
+                var selected = document.getElementById('ROLE');
+                var role = selected.options[selected.selectedIndex].value;
+                formData.append('NAME', $('#NAME').val());
+                formData.append('ID', $('#ID').val());
+                formData.append('ROLE', role);
+                formData.append('USERNAME', $('#USERNAME').val());
+                if ($('#PASSWORD').val() === '') {
+                    console.log('password kosong');
+                } else {
                     if ($('#PASSWORD').val() == $('#REPASSWORD').val()) {
                         formData.append('PASSWORD', $('#PASSWORD').val());
                     } else {
@@ -171,30 +153,28 @@
                             'error'
                         );
                     }
-				}
-			    updateData(formData);
-			} else {
+                }
+                updateData(formData);
+            } else {
                 Swal.fire(
                     'ERROR!',
                     'Please fill the form correctly',
                     'error'
                 );
-			}
+            }
         });
 
         $('#submit').click(function () {
             console.log('submit');
             if (validateForm('submit')) {
                 var formData = new FormData();
-                var avatar = document.getElementById('AVATAR');
-                console.log(avatar.files[0]);
-                formData.append('NAME', $('#NAME').val());
-                formData.append('AVATAR', avatar.files[0]);
-                formData.append('COMPANY', $('#COMPANY').val());
-                formData.append('COMPANY_LOCATION', $('#COMPANY_LOCATION').val());
+                var selected = document.getElementById('ROLE');
+                var role = selected.options[selected.selectedIndex].value;
+                var name = $('#NAME').val();
+                formData.append('NAME', name);
+                formData.append('ROLE', role);
                 formData.append('PASSWORD', $('#PASSWORD').val());
-                formData.append('EMAIL', $('#EMAIL').val());
-                formData.append('STATUS', 'ACTIVE');
+                formData.append('USERNAME', name.replace(/\s+/g, '').toLowerCase());
                 console.log(formData);
                 if ($('#PASSWORD').val() == $('#REPASSWORD').val()) {
                     submitForm(formData);
@@ -205,27 +185,26 @@
                         'error'
                     );
                 }
-			} else {
+            } else {
                 Swal.fire(
                     'ERROR!',
                     'Please fill insert form correctly',
                     'error'
                 );
-			}
+            }
         });
     });
 
     function updateData(inputData) {
-		$.ajax({
-			type: 'POST',
-			data: inputData,
-			dataType: 'JSON',
-			enctype: 'multipart/form-data',
-			processData: false,
-			contentType: false,
-			url: '<?=base_url('User/updatePeserta'); ?>',
-			success: function (res) {
-				console.log(res);
+        $.ajax({
+            type: 'POST',
+            data: inputData,
+            dataType: 'JSON',
+            processData: false,
+            contentType: false,
+            url: '<?=base_url('User/updateAdmin'); ?>',
+            success: function (res) {
+                console.log(res);
                 Swal.fire(
                     res.message.title,
                     res.message.content,
@@ -233,9 +212,9 @@
                 );
                 if (res.message.type !== 'error') {
                     window.location.reload();
-				}
+                }
             }
-		})
+        })
     }
 
     function submitForm(inputData) {
@@ -246,7 +225,7 @@
             dataType: 'JSON',
             processData: false,
             contentType: false,
-            url: '<?=base_url('User/insertPeserta'); ?>',
+            url: '<?=base_url('User/insertAdmin'); ?>',
             success: function (res) {
                 console.log(res);
                 var item = res.data;
@@ -255,12 +234,9 @@
                     "ID": item.ID,
                     "USERNAME": name.replace(/\s+/g, '').toLowerCase(),
                     "NAME": name,
-                    "AVATAR": item.AVATAR,
-                    "COMPANY": item.COMPANY,
-                    "COMPANY_LOCATION": item.COMPANY_LOCATION,
+                    "ROLE": item.ROLE,
+					"LAST_LOGIN": item.LAST_LOGIN,
                     "PASSWORD": item.PASSWORD,
-					"EMAIL": item.EMAIL,
-                    "STATUS": 'ACTIVE'
                 };
                 Swal.fire(
                     res.message.title,
@@ -268,27 +244,25 @@
                     res.message.type
                 );
                 $('#NAME').val('');
-                $('#COMPANY').val('');
-                $('#COMPANY_LOCATION').val('');
+                $('#ROLE').val('');
                 $('#PASSWORD').val('');
                 $('#REPASSWORD').val('');
-                document.getElementById('AVATARVIEW').src = '';
                 pushToData(pushData);
                 reloadDataTable();
             },
         });
     }
-    
-    function readURL(input) {
-		if (input.files && input.files[0]) {
-		    var reader = new FileReader();
 
-		    reader.onload = function (e) {
-				$('#AVATARVIEW').attr('src', e.target.result);
-            }
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#AVATARVIEW').attr('src', e.target.result);
+            };
 
             reader.readAsDataURL(input.files[0]);
-		}
+        }
     }
 
     function reloadDataTable() {
@@ -306,19 +280,19 @@
 
     function validateForm(act) {
         var validated = false;
-		if (act === 'submit') {
-		    validated = !($('#NAME').val() === '' || $('#AVATAR').val() === '' || $('#PASSWORD').val() === '');
-		} else if (act === 'update') {
-			validated = $('#NAME').val() !== '';
-		}
-		return validated;
+        if (act === 'submit') {
+            validated = !($('#NAME').val() === '' || $('#PASSWORD').val() === '');
+        } else if (act === 'update') {
+            validated = $('#NAME').val() !== '';
+        }
+        return validated;
     }
 
     function getSemuaPeserta() {
         $.ajax({
-            url: '<?=base_url('User/getSemuaPeserta'); ?>',
+            url: '<?=base_url('User/getSemuaAdmin'); ?>',
             type: 'GET',
-			dataType: 'JSON',
+            dataType: 'JSON',
             success: function (res) {
                 var response = res;
                 response.forEach(pushToData);
@@ -346,7 +320,7 @@
 
     function nonaktifPeserta(id) {
         $.ajax({
-            url: '<?=base_url("User/deletePeserta/"); ?>' + id,
+            url: '<?=base_url("User/deleteAdmin/"); ?>' + id,
             type: 'POST',
             success: function (res) {
                 console.log(res);
@@ -355,9 +329,9 @@
                     'Data has been deleted',
                     'success'
                 );
-				// if (res.status === 'success') {
-				    window.location.reload();
-				// }
+                // if (res.status === 'success') {
+                window.location.reload();
+                // }
             }
         })
     }
@@ -368,28 +342,22 @@
         document.getElementById('divUsername').setAttribute('hidden', true);
         document.getElementById('update').setAttribute('hidden', true);
         document.getElementById('cancel').setAttribute('hidden', true);
-        document.getElementById('AVATARVIEW').src = '';
-        document.getElementById('PASSWORD').placeholder = 'Masukkan Password untuk peserta login';
+        document.getElementById('PASSWORD').placeholder = 'Masukkan Password untuk admmin login';
         $('#ID').val('');
         $('#USERNAME').val('');
         $('#NAME').val('');
-        $('#COMPANY').val('');
-        $('#COMPANY_LOCATION').val('');
+        $('#ROLE').val('');
         $('#PASSWORD').val('');
         $('#REPASSWORD').val('');
-        $('#EMAIL').val('');
     }
 
     function editData(id) {
         document.getElementById('headTitle').innerText = 'Update Peserta';
         var comp = document.getElementById('edit' + id);
-        var avatar = comp.getAttribute('data-avatar');
-        var company = comp.getAttribute('data-company');
         var username = comp.getAttribute('data-username');
         var name = comp.getAttribute('data-name');
-        var companyloc = comp.getAttribute('data-companyloc');
-        var email = comp.getAttribute('data-email');
-        document.getElementById('AVATARVIEW').src = avatar;
+        var roles = $('#edit' + id).attr('data-role');
+        document.getElementById('ROLE').value = roles;
         document.getElementById('PASSWORD').placeholder = 'Masukkan Password apabila ingin mengganti password';
         document.getElementById('update').removeAttribute('hidden');
         document.getElementById('cancel').removeAttribute('hidden');
@@ -398,25 +366,18 @@
         $('#ID').val(id);
         $('#USERNAME').val(username);
         $('#NAME').val(name);
-        $('#COMPANY').val(company);
-        $('#COMPANY_LOCATION').val(companyloc);
-        $('#EMAIL').val(email);
-		console.log(company);
     }
 
     function pushToData(item) {
-        var avatar = item.AVATAR;
         var btn  = '<div class="btn-group">' +
-            '<button data-email="' + item.EMAIL + '" data-avatar="' + avatar + '" data-username="' + item.USERNAME + '" data-company="' + item.COMPANY + '" data-companyloc="' + item.COMPANY_LOCATION + '" data-name="' + item.NAME + '" class="btn-info edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
+            '<button data-role="' + item.ROLE + '" data-username="' + item.USERNAME + '" data-name="' + item.NAME + '" class="btn-info edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
             '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ID + ')"><i class="ion-close"></i></button>' +
             '</div>';
         var temp = [
             item.USERNAME,
             item.NAME,
-            item.COMPANY,
-            item.COMPANY_LOCATION,
-			item.EMAIL,
-            item.STATUS,
+            item.ROLE,
+			item.LAST_LOGIN,
             btn,
         ];
         data.push(temp);

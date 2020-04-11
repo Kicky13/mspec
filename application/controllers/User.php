@@ -14,8 +14,32 @@ class User extends CI_Controller {
 		$this->load->view('UserView');
 	}
 
+	function admin() {
+		$this->load->view('AdminView');
+	}
+
+	function getSemuaAdmin() {
+		$data = $this->user->getSemuaAdmin();
+		echo json_encode($data);
+	}
+
 	function getSemuaPeserta() {
 		$data = $this->user->getSemuaPeserta();
+		echo json_encode($data);
+	}
+
+	function insertAdmin() {
+		$data = $this->user->insertAdmin($this->input->post());
+		echo json_encode($data);
+	}
+
+	function updateAdmin() {
+		$data = $this->user->updateAdmin($this->input->post());
+		echo json_encode($data);
+	}
+
+	function deleteAdmin($id) {
+		$data = $this->user->deleteAdmin($id);
 		echo json_encode($data);
 	}
 

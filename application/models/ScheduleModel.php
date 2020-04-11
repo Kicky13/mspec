@@ -220,7 +220,9 @@ class ScheduleModel extends CI_Model {
 	}
 
 	function countUjianPeserta() {
-		$total = $this->db->get($this->table)->num_rows();
+		$total = $this->db->select($this->table . '.*, ' . $this->userTable . '.NAME as NAMA_PENGUJI, ' . $this->userTable . '.ID as ID_PENGUJI, ')
+			->join($this->userTable, $this->userTable . '.ID = ' . $this->table . '.EXAMINER_ID')
+			->get($this->table)->num_rows();
 		$response = array(
 			"status" => 200,
 			"message" => "Success",
@@ -241,7 +243,7 @@ class ScheduleModel extends CI_Model {
 			if ($delete) {
 				$message = array(
 					"title" => "SUCCESS",
-					"content" => "Data berhasil di inputkan",
+					"content" => "Data berhasil di hapus",
 					"type" => "success"
 				);
 			}

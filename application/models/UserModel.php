@@ -17,6 +17,38 @@ class UserModel extends CI_Model {
 		return $data->result();
 	}
 
+	function getSemuaAdmin() {
+		$where = 'ROLE = "ADMIN" OR ROLE = "PENGUJI"';
+		$data = $this->db->where($where)->get($this->userTable);
+		return $data->result();
+	}
+
+	function insertAdmin($input) {
+		$message = array(
+			'title' => 'ERROR!',
+			'content' => 'Insert Failed, Server Error',
+			'type' => 'error'
+		);
+		$input['PASSWORD'] = $this->encryption->encrypt($input['PASSWORD']);
+		$insert = $this->db->insert($this->userTable, $input);
+		if ($insert) {
+			$insertID = $this->db->insert_id();
+			$input['ID'] = $insertID;
+			$input['LAST_LOGIN'] = null;
+			$message = array(
+				'title' => 'SUCCESS!',
+				'content' => 'Insert Success',
+				'type' => 'success'
+			);
+		}
+		$response = array(
+			'message' => $message,
+			'status' => 'error',
+			'data' => $input
+		);
+		return $response;
+	}
+
 	function insertPeserta($data) {
 		$username = str_replace(' ', '', strtolower($data['NAME']));
 		$dataUser = array(
@@ -34,6 +66,7 @@ class UserModel extends CI_Model {
 				'AVATAR' => $data['AVATAR'],
 				'COMPANY' => $data['COMPANY'],
 				'COMPANY_LOCATION' => $data['COMPANY_LOCATION'],
+				'EMAIL' => $data['EMAIL'],
 				'STATUS' => 'ACTIVE'
 			);
 			$insertPeserta = $this->db->insert($this->table, $dataPeserta);
@@ -92,7 +125,8 @@ class UserModel extends CI_Model {
 			$updatePeserta = array(
 				'NAME' => $inputData['NAME'],
 				'COMPANY' => $inputData['COMPANY'],
-				'COMPANY_LOCATION' => $inputData['COMPANY_LOCATION']
+				'COMPANY_LOCATION' => $inputData['COMPANY_LOCATION'],
+				'EMAIL' => $inputData['EMAIL']
 			);
 			$updateUser = array();
 			if (isset($inputData['AVATAR'])) {
@@ -154,6 +188,65 @@ class UserModel extends CI_Model {
 		$response = array(
 			'status' => 'success',
 			'total' => $total
+		);
+		return $response;
+	}
+
+	function updateAdmin($data) {
+		$message = array(
+			'title' => 'ERROR!',
+			'content' => 'Update failed, internal server error',
+			'type' => 'error'
+		);
+		$id = $data['ID'];
+		$username = $data['USERNAME'];
+		$usernameExist = $this->db->query('SELECT * FROM user_master WHERE USERNAME = "' . $username . '" AND ID <> ' . $id);
+		if ($usernameExist->num_rows() > 0) {
+			$message = array(
+				'title' => 'ERROR!',
+				'content' => 'Update failed, Duplicate entry name',
+				'type' => 'error'
+			);
+		} else {
+			$update = $this->db->where('ID', $id)->update($this->userTable, $data);
+			if ($update) {
+				$message = array(
+					'title' => 'SUCCESS!',
+					'content' => 'Update success',
+					'type' => 'success'
+				);
+			} else {
+				$message = array(
+					'title' => 'ERROR!',
+					'content' => 'Update failed, internal server error',
+					'type' => 'error'
+				);
+			}
+		}
+		$response = array(
+			'status' => 'success',
+			'message' => $message
+		);
+		return $response;
+	}
+
+	function deleteAdmin($id) {
+		$message = array(
+			'title' => 'ERROR!',
+			'content' => 'Delete failed, internal server error',
+			'type' => 'error'
+		);
+		$delete = $this->db->where('ID', $id)->delete($this->userTable);
+		if ($delete) {
+			$message = array(
+				'title' => 'DELETED!',
+				'content' => 'Data Has Been Deleted',
+				'type' => 'error'
+			);
+		}
+		$response = array(
+			'status' => 200,
+			'message' => $message
 		);
 		return $response;
 	}
