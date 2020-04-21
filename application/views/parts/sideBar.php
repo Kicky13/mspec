@@ -22,7 +22,7 @@
 						</p>
 					</a>
 				</li>
-				<li class="nav-item has-treeview">
+				<li class="nav-item has-treeview" id="adminmenu">
 					<a href="#" class="nav-link">
 						<i class="nav-icon ion ion-android-desktop"></i>
 						<p>
@@ -51,9 +51,29 @@
 						</li>
 					</ul>
 				</li>
+				<li class="nav-item">
+					<a href="<?=base_url('Login/doLogout')?>" class="nav-link">
+						<i class="nav-icon ion ion-power"></i>
+						<p>
+							Logout
+						</p>
+					</a>
+				</li>
 			</ul>
 		</nav>
 		<!-- /.sidebar-menu -->
 	</div>
 	<!-- /.sidebar -->
 </aside>
+
+<script>
+	var uniquerole = <?= $this->session->userdata('ROLE'); ?>;
+
+	function checkAdminMenu() {
+	    if (uniquerole === 'PESERTA') {
+	        document.getElementById('adminmenu').setAttribute('hidden', true);
+		} else {
+	        document.getElementById('adminmenu').removeAttribute('hidden');
+		}
+	}
+</script>

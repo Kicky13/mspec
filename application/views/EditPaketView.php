@@ -235,6 +235,7 @@
         console.log('Ready');
         getDetailPaket();
         getSoal();
+        checkAdminMenu();
 
         bsCustomFileInput.init();
 

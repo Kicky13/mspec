@@ -141,6 +141,8 @@
     $(function () {
         $('.select2bs4').select2();
 
+        checkAdminMenu();
+
         $('#EVENT_START').datetimepicker({
             format: 'LT'
         });

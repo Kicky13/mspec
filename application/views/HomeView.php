@@ -101,6 +101,7 @@
 <script>
 	$(function () {
 		console.log('Ready');
+		checkAdminMenu();
 		countActiveUser();
 		countPaketSoal();
 		countUjian();
