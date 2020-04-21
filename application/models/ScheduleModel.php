@@ -34,7 +34,7 @@ class ScheduleModel extends CI_Model {
 		$event = $this->db->where('ID', $inputData['EVENT'])->get($this->table)->row_array();
 		$peserta = $this->db->where('ID', $inputData['PESERTA'])->get($this->participant)->row_array();
 		$paket = $this->db->where('ID', $inputData['PAKET'])->get($this->paket)->row_array();
-		$check = $this->db->where('EVENT_ID', $inputData['EVENT'])->where('PARTICIPANT_ID', $inputData['PESERTA'])->get($this->abs);
+		$check = $this->db->where('EVENT_ID', $inputData['EVENT'])->where('PARTICIPANT_ID', $inputData['PESERTA'])->where('SHEET_ID', $inputData['PAKET'])->get($this->abs);
 		if ($check->num_rows() == 0) {
 			$input = array(
 				"EVENT_ID" => $inputData['EVENT'],

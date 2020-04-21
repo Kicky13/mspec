@@ -24,7 +24,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
 	<div class="login-logo">
-		<a href="../../index2.html"><b>Admin</b>e-EXAMS</a>
+		<a href="../../index2.html"><b>e-</b>EXAMS</a>
 	</div>
 	<!-- /.login-logo -->
 	<div class="card">
@@ -48,6 +48,14 @@
 						</div>
 					</div>
 				</div>
+				<div class="input-group mb-3">
+					<input type="text" id="examcode" name="examcode" class="form-control" placeholder="Kode Ujian">
+					<div class="input-group-append">
+						<div class="input-group-text">
+							<span class="fas fa-book"></span>
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-8">
 
@@ -61,7 +69,7 @@
 			</form>
 
 			<p class="mb-1">
-				<a href="<?=base_url('Login/participant'); ?>">Login as Participant</a>
+				<a href="<?=base_url('Login'); ?>">Login as Administrator</a>
 			</p>
 		</div>
 		<!-- /.login-card-body -->
@@ -77,29 +85,29 @@
 <script src="<?=base_url()?>assets/dist/js/adminlte.min.js"></script>
 
 <script>
-	$(function () {
-		console.log('Ready Function');
+    $(function () {
+        console.log('Ready Function');
 
-		$('#loginForm').on('submit', function (e) {
-			e.preventDefault();
-			var dataForm = {};
-			$.each($('#loginForm').serializeArray(), function (i, field) {
-				dataForm[field.name] = field.value;
+        $('#loginForm').on('submit', function (e) {
+            e.preventDefault();
+            var dataForm = {};
+            $.each($('#loginForm').serializeArray(), function (i, field) {
+                dataForm[field.name] = field.value;
             });
-			$.ajax({
-				type: 'POST',
-				url: '<?=base_url('Login/authLogin')?>',
-				data: dataForm,
-				success: function (res) {
-				    var alt = JSON.parse(res);
-				    if (alt.error) {
-						document.getElementById(alt.element).classList.add('is-invalid');
-						$('#' + alt.element).val('');
-					} else {
-				        document.location.href = "<?=base_url('Home')?>";
-					}
+            $.ajax({
+                type: 'POST',
+                url: '<?=base_url('Login/authLogin')?>',
+                data: dataForm,
+                success: function (res) {
+                    var alt = JSON.parse(res);
+                    if (alt.error) {
+                        document.getElementById(alt.element).classList.add('is-invalid');
+                        $('#' + alt.element).val('');
+                    } else {
+                        document.location.href = "<?=base_url('Home')?>";
+                    }
                 },
-			});
+            });
         });
     });
 </script>

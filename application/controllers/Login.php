@@ -11,7 +11,15 @@ class Login extends CI_Controller {
 	}
 
 	function index() {
-		$this->load->view('LoginView');
+		if ($this->session->has_userdata('ID')) {
+			redirect('Home');
+		} else {
+			$this->load->view('LoginView');
+		}
+	}
+
+	function participant() {
+		$this->load->view('LoginPesertaView');
 	}
 
 	public function authLogin() {

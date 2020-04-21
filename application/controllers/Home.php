@@ -11,7 +11,19 @@ class Home extends CI_Controller {
 	}
 
 	public function index() {
-		$this->load->view('HomeView');
+		if ($this->session->has_userdata('ROLE')) {
+			$userdata = $this->session->userdata();
+			if ($userdata['ROLE'] == 'ADMIN') {
+				$this->load->view('HomeView');
+			} else if ($userdata['ROLE'] == 'PESERTA') {
+				$this->load->view('HomePesertaView');
+			} else {
+				$this->sessios->sess_destroy();
+				redirect('Login');
+			}
+		} else {
+			redirect('Login');
+		}
 	}
 
 	public function countActivePeserta() {
