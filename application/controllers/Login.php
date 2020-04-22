@@ -27,6 +27,11 @@ class Login extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	function authLoginPeserta() {
+		$data = $this->login->authLoginPeserta($this->input->post());
+		echo json_encode($data);
+	}
+
 	function doLogout() {
 		$this->session->sess_destroy();
 		redirect('Login');

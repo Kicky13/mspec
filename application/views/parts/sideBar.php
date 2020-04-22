@@ -22,7 +22,8 @@
 						</p>
 					</a>
 				</li>
-				<li class="nav-item has-treeview" id="adminmenu">
+				<?php if ($this->session->userdata('ROLE') == 'ADMIN') {
+					echo '<li class="nav-item has-treeview" id="adminmenu">
 					<a href="#" class="nav-link">
 						<i class="nav-icon ion ion-android-desktop"></i>
 						<p>
@@ -32,7 +33,7 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="<?=base_url('Soal'); ?>" class="nav-link">
+							<a href="' . base_url('Soal') . '" class="nav-link">
 								<i class="ion ion-clipboard nav-icon"></i>
 								<p>Create Soal</p>
 							</a>
@@ -44,13 +45,14 @@
 <!--							</a>-->
 <!--						</li>-->
 						<li class="nav-item">
-							<a href="<?=base_url('User/admin'); ?>" class="nav-link">
+							<a href="' . base_url('User/admin') . '" class="nav-link">
 								<i class="ion ion-person-add nav-icon"></i>
 								<p>Add User</p>
 							</a>
 						</li>
 					</ul>
-				</li>
+				</li>';
+				} ?>
 				<li class="nav-item">
 					<a href="<?=base_url('Login/doLogout')?>" class="nav-link">
 						<i class="nav-icon ion ion-power"></i>
@@ -67,9 +69,8 @@
 </aside>
 
 <script>
-	var uniquerole = <?= $this->session->userdata('ROLE'); ?>;
-
 	function checkAdminMenu() {
+        var uniquerole = <?= $this->session->userdata('ROLE'); ?>;
 	    if (uniquerole === 'PESERTA') {
 	        document.getElementById('adminmenu').setAttribute('hidden', true);
 		} else {

@@ -96,7 +96,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: '<?=base_url('Login/authLogin')?>',
+                url: '<?=base_url('Login/authLoginPeserta')?>',
                 data: dataForm,
                 success: function (res) {
                     var alt = JSON.parse(res);
