@@ -186,4 +186,13 @@ class Soal extends CI_Controller {
 		$data = $this->paket->answerDetail($id);
 		echo json_encode($data);
 	}
+
+	function getExamWorkList() {
+		$data = $this->paket->getExamWorkList();
+		echo json_encode($data);
+	}
+
+	function doExam($ID) {
+		$this->load->view('SoalWorkView', compact('ID'));
+	}
 }

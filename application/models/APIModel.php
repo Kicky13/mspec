@@ -54,7 +54,7 @@ class APIModel extends CI_Model {
 						$res = null;
 					}
 				} else {
-					$err = "Test has passed";
+					$err = "Not in Test Date, Login again on Test Date";
 					$msg = 'Login Gagal';
 					$res = null;
 				}

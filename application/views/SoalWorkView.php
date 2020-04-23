@@ -9,12 +9,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
-	<title>AdminLTE 3 | Top Navigation</title>
+	<style>
+		::-webkit-scrollbar {
+			width: 2px;
+		}
+
+		/* Track */
+		::-webkit-scrollbar-track {
+			background: #f1f1f1;
+		}
+
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #888;
+		}
+
+		/* Handle on hover */
+		::-webkit-scrollbar-thumb:hover {
+			background: #555;
+		}
+	</style>
+
+	<title>e-Exams | Top Navigator</title>
 
 	<!-- Font Awesome Icons -->
-	<link rel="stylesheet" href="<?=base_url()?>assets/plugins/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>assets/plugins/fontawesome-free/css/all.min.css">
 	<!-- Theme style -->
-	<link rel="stylesheet" href="<?=base_url()?>assets/dist/css/adminlte.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>assets/dist/css/adminlte.min.css">
 	<!-- Google Font: Source Sans Pro -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -24,13 +45,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- Navbar -->
 	<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
 		<div class="container">
-			<a href="../../index3.html" class="navbar-brand">
-				<img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+			<a href="<?= base_url('Home') ?>" class="navbar-brand">
+				<img src="<?= base_url() ?>assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
+					 class="brand-image img-circle elevation-3"
 					 style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
+				<span class="brand-text font-weight-light">Admine-EXAMS</span>
 			</a>
 
-			<button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+					aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -38,146 +61,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<!-- Left navbar links -->
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a href="index3.html" class="nav-link">Home</a>
+						<a href="<?= base_url('Home'); ?>" class="nav-link">Home</a>
 					</li>
 					<li class="nav-item">
-						<a href="#" class="nav-link">Contact</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Dropdown</a>
-						<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-							<li><a href="#" class="dropdown-item">Some action </a></li>
-							<li><a href="#" class="dropdown-item">Some other action</a></li>
-
-							<li class="dropdown-divider"></li>
-
-							<!-- Level two dropdown-->
-							<li class="dropdown-submenu dropdown-hover">
-								<a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Hover for action</a>
-								<ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-									<li>
-										<a tabindex="-1" href="#" class="dropdown-item">level 2</a>
-									</li>
-
-									<!-- Level three dropdown-->
-									<li class="dropdown-submenu">
-										<a id="dropdownSubMenu3" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">level 2</a>
-										<ul aria-labelledby="dropdownSubMenu3" class="dropdown-menu border-0 shadow">
-											<li><a href="#" class="dropdown-item">3rd level</a></li>
-											<li><a href="#" class="dropdown-item">3rd level</a></li>
-										</ul>
-									</li>
-									<!-- End Level three -->
-
-									<li><a href="#" class="dropdown-item">level 2</a></li>
-									<li><a href="#" class="dropdown-item">level 2</a></li>
-								</ul>
-							</li>
-							<!-- End Level two -->
-						</ul>
+						<a href="<?= base_url('Login/doLogout'); ?>" class="nav-link">Logout</a>
 					</li>
 				</ul>
-
 				<!-- SEARCH FORM -->
 				<form class="form-inline ml-0 ml-md-3">
 					<div class="input-group input-group-sm">
-						<input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-						<div class="input-group-append">
-							<button class="btn btn-navbar" type="submit">
-								<i class="fas fa-search"></i>
-							</button>
-						</div>
 					</div>
 				</form>
 			</div>
 
 			<!-- Right navbar links -->
 			<ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-				<!-- Messages Dropdown Menu -->
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#">
-						<i class="fas fa-comments"></i>
-						<span class="badge badge-danger navbar-badge">3</span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-						<a href="#" class="dropdown-item">
-							<!-- Message Start -->
-							<div class="media">
-								<img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-								<div class="media-body">
-									<h3 class="dropdown-item-title">
-										Brad Diesel
-										<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-									</h3>
-									<p class="text-sm">Call me whenever you can...</p>
-									<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-								</div>
-							</div>
-							<!-- Message End -->
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<!-- Message Start -->
-							<div class="media">
-								<img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-								<div class="media-body">
-									<h3 class="dropdown-item-title">
-										John Pierce
-										<span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-									</h3>
-									<p class="text-sm">I got your message bro</p>
-									<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-								</div>
-							</div>
-							<!-- Message End -->
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<!-- Message Start -->
-							<div class="media">
-								<img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-								<div class="media-body">
-									<h3 class="dropdown-item-title">
-										Nora Silvester
-										<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-									</h3>
-									<p class="text-sm">The subject goes here</p>
-									<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-								</div>
-							</div>
-							<!-- Message End -->
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-					</div>
-				</li>
-				<!-- Notifications Dropdown Menu -->
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#">
-						<i class="far fa-bell"></i>
-						<span class="badge badge-warning navbar-badge">15</span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-						<span class="dropdown-header">15 Notifications</span>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-envelope mr-2"></i> 4 new messages
-							<span class="float-right text-muted text-sm">3 mins</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-users mr-2"></i> 8 friend requests
-							<span class="float-right text-muted text-sm">12 hours</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-file mr-2"></i> 3 new reports
-							<span class="float-right text-muted text-sm">2 days</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-					</div>
-				</li>
 				<li class="nav-item">
 					<a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
 							class="fas fa-th-large"></i></a>
@@ -194,12 +92,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="container">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1>
+						<h1 class="m-0 text-dark"> Top Navigation</h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a href="#">Home</a></li>
-							<li class="breadcrumb-item"><a href="#">Layout</a></li>
+							<li class="breadcrumb-item"><a href="#">My Exam List</a></li>
 							<li class="breadcrumb-item active">Top Navigation</li>
 						</ol>
 					</div><!-- /.col -->
@@ -212,61 +109,142 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<div class="content">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-
-								<p class="card-text">
-									Some quick example text to build on the card title and make up the bulk of the card's
-									content.
-								</p>
-
-								<a href="#" class="card-link">Card link</a>
-								<a href="#" class="card-link">Another link</a>
-							</div>
-						</div>
-
-						<div class="card card-primary card-outline">
-							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-
-								<p class="card-text">
-									Some quick example text to build on the card title and make up the bulk of the card's
-									content.
-								</p>
-								<a href="#" class="card-link">Card link</a>
-								<a href="#" class="card-link">Another link</a>
-							</div>
-						</div><!-- /.card -->
-					</div>
-					<!-- /.col-md-6 -->
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-header">
-								<h5 class="card-title m-0">Featured</h5>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title">Special title treatment</h6>
-
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-								<a href="#" class="btn btn-primary">Go somewhere</a>
-							</div>
-						</div>
-
-						<div class="card card-primary card-outline">
-							<div class="card-header">
-								<h5 class="card-title m-0">Featured</h5>
-							</div>
-							<div class="card-body">
-								<h6 class="card-title">Special title treatment</h6>
-
-								<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-								<a href="#" class="btn btn-primary">Go somewhere</a>
-							</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="card card-primary card-outline">
+								<div class="card-body">
+									<p class="card-text">
+										Some quick example text to build on the card title and make up the bulk of the
+										card's
+										content.
+									</p>
+								</div>
+							</div><!-- /.card -->
 						</div>
 					</div>
-					<!-- /.col-md-6 -->
+					<div class="row">
+						<h5 class="mt-4 mb-2">Tabs in Cards</h5>
+						<div class="col-12">
+							<!-- Custom Tabs -->
+							<div class="card">
+								<div class="card-header d-flex p-0">
+									<ul class="nav nav-pills ml-auto p-2">
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
+												1</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
+												2</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
+												3</a></li>
+
+									</ul>
+								</div><!-- /.card-header -->
+								<div class="card-body">
+									<div class="tab-content">
+										<div class="tab-pane active" id="tab_1">
+											A wonderful serenity has taken possession of my entire soul,
+											like these sweet mornings of spring which I enjoy with my whole heart.
+											I am alone, and feel the charm of existence in this spot,
+											which was created for the bliss of souls like mine. I am so happy,
+											my dear friend, so absorbed in the exquisite sense of mere tranquil
+											existence,
+											that I neglect my talents. I should be incapable of drawing a single stroke
+											at the present moment; and yet I feel that I never was a greater artist than
+											now.
+										</div>
+										<!-- /.tab-pane -->
+										<div class="tab-pane" id="tab_2">
+											The European languages are members of the same family. Their separate
+											existence is a myth.
+											For science, music, sport, etc, Europe uses the same vocabulary. The
+											languages only differ
+											in their grammar, their pronunciation and their most common words. Everyone
+											realizes why a
+											new common language would be desirable: one could refuse to pay expensive
+											translators. To
+											achieve this, it would be necessary to have uniform grammar, pronunciation
+											and more common
+											words. If several languages coalesce, the grammar of the resulting language
+											is more simple
+											and regular than that of the individual languages.
+										</div>
+										<!-- /.tab-pane -->
+										<div class="tab-pane" id="tab_3">
+											Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+											Lorem Ipsum has been the industry's standard dummy text ever since the
+											1500s,
+											when an unknown printer took a galley of type and scrambled it to make a
+											type specimen book.
+											It has survived not only five centuries, but also the leap into electronic
+											typesetting,
+											remaining essentially unchanged. It was popularised in the 1960s with the
+											release of Letraset
+											sheets containing Lorem Ipsum passages, and more recently with desktop
+											publishing software
+											like Aldus PageMaker including versions of Lorem Ipsum.
+										</div>
+										<!-- /.tab-pane -->
+									</div>
+									<!-- /.tab-content -->
+								</div><!-- /.card-body -->
+							</div>
+							<!-- ./card -->
+						</div>
+						<!-- /.col -->
+					</div>
 				</div>
 				<!-- /.row -->
 			</div><!-- /.container-fluid -->
@@ -281,6 +259,154 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<div class="p-3">
 			<h5>Title</h5>
 			<p>Sidebar content</p>
+			<div class="col-lg-12">
+				<div class="row pre-scrollable">
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+					<div style="margin-bottom: 5px" class="col-3 number-button">
+						<button type="button" class="btn btn-block btn-primary btn-flat">1</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</aside>
 	<!-- /.control-sidebar -->
@@ -300,11 +426,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script src="<?=base_url()?>assets/plugins/jquery/jquery.min.js"></script>
+<script src="<?= base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="<?=base_url()?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= base_url() ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="<?=base_url()?>assets/dist/js/adminlte.min.js"></script>
+<script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
+<script>
+	$(function () {
+		console.log('ready');
+    });
+</script>
 </body>
 
 <!-- Mirrored from adminlte.io/themes/v3/pages/layout/top-nav.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 28 Jan 2020 04:53:27 GMT -->

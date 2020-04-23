@@ -64,7 +64,7 @@
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-						<h3>Tambah Paket Soal</h3>
+						<h3>Tambah Jadwal Ujian</h3>
 					</div>
 					<form role="form" id="add-new-paket" name="add-new-paket">
 						<div class="card-body">
@@ -140,8 +140,6 @@
     var data = [];
     $(function () {
         $('.select2bs4').select2();
-
-        checkAdminMenu();
 
         $('#EVENT_START').datetimepicker({
             format: 'LT'

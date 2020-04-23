@@ -126,7 +126,6 @@
     var data = [];
     $(function () {
         getSemuaPeserta();
-		checkAdminMenu();
         $('#cancel').click(function () {
             cancelUpdate();
         });

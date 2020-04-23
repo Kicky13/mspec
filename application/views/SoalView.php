@@ -149,7 +149,6 @@
     var data = [];
     $(function () {
 		getPaketSoal();
-		checkAdminMenu();
 		$('#submit').click(function () {
 		    console.log('submit');
             var inputData = {

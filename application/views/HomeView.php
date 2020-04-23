@@ -101,7 +101,6 @@
 <script>
 	$(function () {
 		console.log('Ready');
-		checkAdminMenu();
 		countActiveUser();
 		countPaketSoal();
 		countUjian();
@@ -130,7 +129,7 @@
                 document.getElementById('ujianCount').innerText = res.total;
             }
         });
-        setTimeout(countActiveUser, 10000);
+        setTimeout(countUjian, 10000);
     }
     function countPaketSoal() {
         console.log('Active User');
@@ -143,7 +142,7 @@
                 document.getElementById('paketCount').innerText = res.total;
             }
         });
-        setTimeout(countActiveUser, 10000);
+        setTimeout(countPaketSoal, 10000);
     }
 </script>
 <script src="<?=base_url()?>assets/dist/js/demo.js"></script>

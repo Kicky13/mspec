@@ -7,12 +7,12 @@
 		<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-					<h1 class="m-0 text-dark">Dashboard</h1>
+					<h1 class="m-0 text-dark">My Exam List</h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 					<ol class="breadcrumb float-sm-right">
 						<li class="breadcrumb-item"><a href="<?=base_url('Home'); ?>">Home</a></li>
-						<li class="breadcrumb-item active">Dashboard</li>
+						<li class="breadcrumb-item active">My Exam List</li>
 					</ol>
 				</div><!-- /.col -->
 			</div><!-- /.row -->
@@ -38,27 +38,12 @@
 							<h5 class="widget-user-desc" id="companyofuser">Lead Developer</h5>
 						</div>
 						<div class="card-footer p-0">
-							<ul class="nav flex-column">
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										Projects <span class="float-right badge bg-primary">31</span>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										Tasks <span class="float-right badge bg-info">5</span>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										Completed Projects <span class="float-right badge bg-success">12</span>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										Followers <span class="float-right badge bg-danger">842</span>
-									</a>
-								</li>
+							<ul class="nav flex-column" id="examlist">
+<!--								<li class="nav-item">-->
+<!--									<a href="#" class="nav-link">-->
+<!--										Projects <span class="float-right badge bg-danger">842 Menit</span><span class="float-right badge bg-primary">31 Soal</span>-->
+<!--									</a>-->
+<!--								</li>-->
 							</ul>
 						</div>
 					</div>
@@ -82,9 +67,40 @@
 	<script>
         $(function () {
             console.log('Ready');
-            checkAdminMenu();
-            document.getElementById('adminmenu').setAttribute('hidden', true);
+            document.getElementById('useravatar').src = '<?= $this->session->userdata('AVATAR'); ?>';
+            document.getElementById('nameofuser').innerText = '<?= $this->session->userdata('NAME'); ?>';
+            document.getElementById('companyofuser').innerText = '<?= $this->session->userdata('COMPANY'); ?>';
+            getExamWorkList();
         });
+        
+        function getExamWorkList() {
+			console.log('Exam Work List');
+			$.ajax({
+				type: 'POST',
+				dataType: 'JSON',
+				url: '<?=base_url('Soal/getExamWorkList'); ?>',
+				success: function (res) {
+					console.log(res);
+					var data = res.data;
+                    var resp = '';
+					if (data.length === 0) {
+                        resp += '<li class="nav-item">';
+                        resp += '<p>Maaf, Anda tidak memiliki jadwal test apapun hari ini, Silahkan logout</p>';
+                        resp += '</li>'
+					} else {
+					    for (i = 0; i < data.length; i++) {
+					        var url = '<?=base_url('Soal/doExam/'); ?>' + data[i]['ID'];
+                            resp += '<li class="nav-item">';
+                            resp += '<a href="' + url + '" class="nav-link">';
+                            resp += data[i]['SHEET_NO'] + ' <span class="float-right badge bg-danger">' + data[i]['DURATION'] + ' Menit</span><span class="float-right badge bg-primary">' + data[i]['TOTALSOAL'] + ' Soal</span>';
+                            resp += '</a>';
+                            resp += '</li>'
+						}
+					}
+					document.getElementById('examlist').innerHTML = resp;
+                }
+			});
+        }
 	</script>
 	<script src="<?=base_url()?>assets/dist/js/demo.js"></script>
 	<!-- /.content-wrapper -->

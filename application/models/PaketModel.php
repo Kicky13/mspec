@@ -7,6 +7,7 @@ class PaketModel extends CI_Model
 	protected $package_table = 'question_package';
 	protected $soal_table = 'question_master';
 	protected $answer_table = 'qchoice_master';
+	protected $events = 'events';
 
 	public function __construct()
 	{
@@ -128,6 +129,28 @@ class PaketModel extends CI_Model
 		$response = array(
 			'status' => 'success',
 			'total' => $total
+		);
+		return $response;
+	}
+
+	function getExamWorkList() {
+		$examID = $this->session->userdata('EXAM_ID');
+		$partID = $this->session->userdata('PARTICIPANT_ID');
+		$sql = $this->db->select($this->events . '.*, ' . $this->table . '.DURATION, ' . $this->table . '.MAX_SCORE, ' . $this->table . '.SHEET_NO')->join($this->table, $this->table . '.ID = ' . $this->events . '.SHEET_ID')->where('EVENT_ID', $examID)->where('PARTICIPANT_ID', $partID)->get($this->events);
+		$dataEvent = $sql->result_array();
+		for ($i = 0; $i < count($dataEvent); $i++) {
+			$sql2 = $this->db->where('QSHEET_ID', $dataEvent[$i]['SHEET_ID'])->get($this->package_table);
+			$dataEvent[$i]['TOTALSOAL'] = $sql2->num_rows();
+		}
+		$msg = array(
+			'titlemsg' => 'SUCCESS',
+			'contentmsg' => 'Ambil data berhasil',
+			'typemsg' => 'success'
+		);
+		$response = array(
+			'status' => 200,
+			'data' => $dataEvent,
+			'msg' => $msg
 		);
 		return $response;
 	}
