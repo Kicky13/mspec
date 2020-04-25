@@ -89,6 +89,7 @@ class APIModel extends CI_Model {
             ->join($this->soal, $this->soal . '.ID = ' . $this->abs . '.SHEET_ID')
             ->join($this->user, $this->user . '.ID = ' . $this->event . '.EXAMINER_ID')
             ->where($this->peserta . '.ID = ', $regid)
+			->where($this->event . '.EVENT_DATE', 'CURDATE()')
             ->get($this->peserta)
             ->result_array();
         $event = array();
@@ -129,7 +130,7 @@ class APIModel extends CI_Model {
                         "question" => $sqlque['CONTENT'],
                         "image" => $sqlque['IMAGE']
                     );
-                    $ans = $this->db->select('ALPHA as code, ANSWER_TEXT as answer, VALUE as value')->where('QUESTION_ID', $sqlque['ID'])->get($this->ans)->result_array();
+                    $ans = $this->db->select('ALPHA as code, ANSWER_TEXT as answer, VALUE as value')->where('QUESTION_ID', $sqlque['ID'])->order_by('ALPHA')->get($this->ans)->result_array();
                     $que['answer'] = $ans;
                     array_push($ques, $que);
                     $number++;

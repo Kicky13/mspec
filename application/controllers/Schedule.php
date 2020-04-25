@@ -57,4 +57,9 @@ class Schedule extends CI_Controller {
 		$data = $this->event->deleteJadwalTest($id);
 		echo json_encode($data);
 	}
+
+	function getDoExamPackage() {
+		$data = $this->event->getDoExamPackage($this->input->post('id'));
+		echo json_encode($data);
+	}
 }

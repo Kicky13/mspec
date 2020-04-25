@@ -7,6 +7,9 @@ class ScheduleModel extends CI_Model {
 	protected $participant = 'participant_master';
 	protected $paket = 'qsheet_master';
 	protected $abs = 'events';
+	protected $quespack = 'question_package';
+	protected $question = 'question_master';
+	protected $answer = 'qchoice_master';
 
 	public function __construct()
 	{
@@ -253,6 +256,51 @@ class ScheduleModel extends CI_Model {
 			"message" => $message,
 		);
 		return $response;
+	}
+
+	function getDoExamPackage($id) {
+		$events = $this->db->select('events.*, events_master.ENCODE, events_master.EVENT_TITLE, events_master.EVENT_DATE, events_master.EXAMINER_ID, user_master.NAME, qsheet_master.SHEET_NO, qsheet_master.METHOD, qsheet_master.EXAM_AREA, qsheet_master.NDE_LEVEL, qsheet_master.DURATION, qsheet_master.EXAM_TYPE, qsheet_master.MAX_SCORE, qsheet_master.RULES')
+			->join($this->paket, $this->paket . '.ID = ' . $this->abs . '.SHEET_ID')
+			->join($this->table, $this->table . '.ID = ' . $this->abs . '.EVENT_ID')
+			->join($this->userTable, $this->userTable . '.ID = ' . $this->table . '.EXAMINER_ID')
+			->where($this->abs . '.ID', $id)
+			->get($this->abs)
+			->row_array();
+		$quesPack = $this->db->select($this->quespack . '.*, ' . $this->question . '.CONTENT, ' . $this->question . '.IMAGE')->join($this->question, $this->question . '.ID = ' . $this->quespack . '.QUESTION_ID')->where($this->quespack . '.QSHEET_ID',  $events['SHEET_ID'])->get($this->quespack)->result_array();
+		$quesPack = $this->shuffle_array($quesPack);
+		$questions = array();
+		$number = 1;
+		foreach ($quesPack as $item) {
+			$question = array(
+				'QUESTION_ID' => $item['QUESTION_ID'],
+				'NUMBER' => $number,
+				'QUESTION' => $item['CONTENT'],
+				'IMAGE' => $item['IMAGE']
+			);
+			$answer = $this->db->where('QUESTION_ID', $item['QUESTION_ID'])->order_by('ALPHA')->get($this->answer)->result_array();
+			$question['ANSWER'] = $answer;
+			array_push($questions, $question);
+			$number++;
+		}
+		$events['QUESTIONS'] = $questions;
+		return $callback = array(
+			'status' => 200,
+			'message' => '',
+			'errorMessage' => '',
+			'data' => $events
+		);
+	}
+
+	function shuffle_array($list) {
+		if (!is_array($list)) return $list;
+
+		$keys = array_keys($list);
+		shuffle($keys);
+		$random = array();
+		foreach ($keys as $key) {
+			$random[$key] = $list[$key];
+		}
+		return $random;
 	}
 
 }

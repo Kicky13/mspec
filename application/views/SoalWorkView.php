@@ -43,7 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <div class="wrapper">
 
 	<!-- Navbar -->
-	<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+	<nav class="main-header navbar navbar-expand-md navbar-light fixed-top navbar-white">
 		<div class="container">
 			<a href="<?= base_url('Home') ?>" class="navbar-brand">
 				<img src="<?= base_url() ?>assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
@@ -64,8 +64,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<a href="<?= base_url('Home'); ?>" class="nav-link">Home</a>
 					</li>
 					<li class="nav-item">
-						<a href="<?= base_url('Login/doLogout'); ?>" class="nav-link">Logout</a>
+						<a href="#" id="timecounter" class="nav-link"></a>
 					</li>
+<!--					<li class="nav-item">-->
+<!--						<a href="--><?//= base_url('Login/doLogout'); ?><!--" class="nav-link">Logout</a>-->
+<!--					</li>-->
+<!--					<li class="nav-item">-->
+<!--						<a href="--><?//= base_url('Login/doLogout'); ?><!--" class="nav-link">Logout</a>-->
+<!--					</li>-->
 				</ul>
 				<!-- SEARCH FORM -->
 				<form class="form-inline ml-0 ml-md-3">
@@ -109,80 +115,63 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<div class="content">
 			<div class="container">
 				<div class="row">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="card card-primary card-outline">
-								<div class="card-body">
-									<p class="card-text">
-										Some quick example text to build on the card title and make up the bulk of the
-										card's
-										content.
-									</p>
+					<div class="col-md-12">
+						<div class="card card-success">
+							<div class="card-header">
+								<h3 class="card-title">Exam Info</h3>
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+									</button>
 								</div>
-							</div><!-- /.card -->
+								<!-- /.card-tools -->
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								<d1 class="row" style="margin-left: 15px; margin-right: 15px">
+									<dt class="col-sm-4">Name</dt>
+									<dd id="part_name" class="col-sm-8">Rizki Akbar Wahono</dd>
+									<dt class="col-sm-4">Date</dt>
+									<dd id="event_date" class="col-sm-8">25 April 2020</dd>
+									<dt class="col-sm-4">Method</dt>
+									<dd id="method" class="col-sm-8">Magnetic Particle Testing</dd>
+									<dt class="col-sm-4">Level</dt>
+									<dd id="level" class="col-sm-8">II ( Two ) </dd>
+									<dt class="col-sm-4">Examination</dt>
+									<dd id="examination" class="col-sm-8">GENERAL ( closed book )</dd>
+									<dt class="col-sm-4">Duration</dt>
+									<dd id="duration" class="col-sm-8">60 Minutes</dd>
+									<dt class="col-sm-4">Question No.</dt>
+									<dd id="quest_no" class="col-sm-8">MT- G - MSS – 17U01</dd>
+									<dt class="col-sm-4">Type of Exam</dt>
+									<dd id="typeofexam" class="col-sm-8">Reexamination</dd>
+									<dt class="col-sm-4">Company</dt>
+									<dd id="company" class="col-sm-8">Private</dd>
+									<dt class="col-sm-4">Location</dt>
+									<dd id="companyloc" class="col-sm-8">MSS Surabaya</dd>
+									<dt class="col-sm-4">Grade</dt>
+									<dd id="grade" class="col-sm-8"></dd>
+									<dt class="col-sm-4">Examiner</dt>
+									<dd id="examiner" class="col-sm-8">Adipadmo
+										Reference : NA NDE – Level III
+										Cert. no. 126596</dd>
+									<dt class="col-sm-4">Rule</dt>
+									<dd id="rules" class="col-sm-8">'Attention :
+										1.Do not write nor make any drawing on the QUESTION SHEET.
+										2.The QUESTION SHEET AND  ANSWER SHEET  shall be returned back to the examiner
+										3.In one question may consist more than one correct answer, please choose the best  correct answer by put marking / blacken the “ circle “ consistently  on the  ANSWER SHEET to the following questions as applicable ; if change the answer; cross out twice and then put marking / blacken the “ circle “ at  the new answer, following to put the initial
+										4.The questions consist of dual language, should any conflict between them,  the English version shall govern'</dd>
+								</d1>
+							</div>
+							<!-- /.card-body -->
 						</div>
 					</div>
 					<div class="row">
-						<h5 class="mt-4 mb-2">Tabs in Cards</h5>
+						<h5 class="mt-4 mb-2">Question</h5>
 						<div class="col-12">
 							<!-- Custom Tabs -->
 							<div class="card">
 								<div class="card-header d-flex p-0">
-									<ul class="nav nav-pills ml-auto p-2">
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
-										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
-												1</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
-												2</a></li>
-										<li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Tab
-												3</a></li>
+									<ul id="tabHeader" class="nav nav-pills ml-auto p-2">
 										<li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Tab
 												1</a></li>
 										<li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Tab
@@ -193,7 +182,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									</ul>
 								</div><!-- /.card-header -->
 								<div class="card-body">
-									<div class="tab-content">
+									<div class="tab-content" id="tabContent">
 										<div class="tab-pane active" id="tab_1">
 											A wonderful serenity has taken possession of my entire soul,
 											like these sweet mornings of spring which I enjoy with my whole heart.
@@ -204,6 +193,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											that I neglect my talents. I should be incapable of drawing a single stroke
 											at the present moment; and yet I feel that I never was a greater artist than
 											now.
+											<div class="row">
+												<div class="col-4">
+													<input type="radio" id="ans1a" name="ans1" value="a"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans1b" name="ans1" value="b"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans1c" name="ans1" value="c"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans1d" name="ans1" value="d"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans1e" name="ans1" value="e"> A. Ini itu
+												</div>
+											</div>
 										</div>
 										<!-- /.tab-pane -->
 										<div class="tab-pane" id="tab_2">
@@ -220,6 +226,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											words. If several languages coalesce, the grammar of the resulting language
 											is more simple
 											and regular than that of the individual languages.
+											<div class="row">
+												<div class="col-4">
+													<input type="radio" id="ans2a" name="ans2" value="a"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans2b" name="ans2" value="b"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans2c" name="ans2" value="c"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans2d" name="ans2" value="d"> A. Ini itu
+												</div>
+												<div class="col-4">
+													<input type="radio" id="ans2e" name="ans2" value="e"> A. Ini itu
+												</div>
+											</div>
 										</div>
 										<!-- /.tab-pane -->
 										<div class="tab-pane" id="tab_3">
@@ -254,7 +277,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- /.content-wrapper -->
 
 	<!-- Control Sidebar -->
-	<aside class="control-sidebar control-sidebar-dark">
+	<aside class="control-sidebar control-sidebar-dark fixed">
 		<!-- Control sidebar content goes here -->
 		<div class="p-3">
 			<h5>Title</h5>
@@ -432,9 +455,113 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="<?= base_url() ?>assets/dist/js/adminlte.min.js"></script>
 <script>
-	$(function () {
-		console.log('ready');
+	var question = [];
+    $(function () {
+        console.log('ready');
+        getExamQuestion();
     });
+    
+    function getExamQuestion() {
+		var id = '<?=$ID; ?>';
+		console.log(id);
+		$.ajax({
+			url: '<?=base_url('Schedule/getDoExamPackage'); ?>',
+			type: 'POST',
+			dataType: 'JSON',
+			data: {
+			    id: id,
+			},
+			success: function (res) {
+				console.log(res);
+				var data = res.data;
+				$('#examiner');
+				document.getElementById('part_name').innerText = '<?=$this->session->userdata('NAME'); ?>';
+				document.getElementById('event_date').innerText = data.EVENT_DATE;
+                document.getElementById('method').innerText = data.METHOD;
+                document.getElementById('level').innerText = data.NDE_LEVEL;
+                document.getElementById('examination').innerText = data.EXAM_AREA;
+                document.getElementById('duration').innerText = data.DURATION + ' Minutes';
+                document.getElementById('typeofexam').innerText = data.EXAM_TYPE;
+                document.getElementById('company').innerText = '<?=$this->session->userdata('COMPANY'); ?>';
+                document.getElementById('companyloc').innerText = '<?=$this->session->userdata('COMPANY_LOCATION'); ?>';
+                document.getElementById('examiner').innerText = data.NAME;
+                document.getElementById('rules').innerText = data.RULES;
+                question = data.QUESTIONS;
+                console.log(question);
+            }
+		});
+    }
+    
+    function buildTab() {
+        var inner = '';
+		for(i = 0; i < question.length; i++) {
+		    inner += '<li class="nav-item"><a class="nav-link" href="#tabno_' + question[i]['NUMBER'] +'" data-toggle="tab">No ' + question[i]['NUMBER'] + '</a></li>';
+		}
+		document.getElementById('tabHeader').innerHTML = inner;
+    }
+    
+    function buildPanelContent() {
+    <div class="tab-pane active" id="tab_1">
+            A wonderful serenity has taken possession of my entire soul,
+            like these sweet mornings of spring which I enjoy with my whole heart.
+            I am alone, and feel the charm of existence in this spot,
+            which was created for the bliss of souls like mine. I am so happy,
+            my dear friend, so absorbed in the exquisite sense of mere tranquil
+        existence,
+            that I neglect my talents. I should be incapable of drawing a single stroke
+        at the present moment; and yet I feel that I never was a greater artist than
+        now.
+        <div class="row">
+            <div class="col-4">
+            <input type="radio" id="ans1a" name="ans1" value="a"> A. Ini itu
+        </div>
+        <div class="col-4">
+            <input type="radio" id="ans1b" name="ans1" value="b"> A. Ini itu
+        </div>
+        <div class="col-4">
+            <input type="radio" id="ans1c" name="ans1" value="c"> A. Ini itu
+        </div>
+        <div class="col-4">
+            <input type="radio" id="ans1d" name="ans1" value="d"> A. Ini itu
+        </div>
+        <div class="col-4">
+            <input type="radio" id="ans1e" name="ans1" value="e"> A. Ini itu
+        </div>
+        </div>
+        </div>
+
+    }
+    
+    function buildSidebar() {
+		
+    }
+    // Set the date we're counting down to
+    var countDownDate = new Date("Apr 25, 2020 23:37:25").getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("timecounter").innerHTML = hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("demo").innerHTML = "EXPIRED";
+        }
+    }, 1000);
 </script>
 </body>
 
