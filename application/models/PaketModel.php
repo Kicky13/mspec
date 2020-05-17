@@ -8,6 +8,8 @@ class PaketModel extends CI_Model
 	protected $soal_table = 'question_master';
 	protected $answer_table = 'qchoice_master';
 	protected $events = 'events';
+	protected $ljkHeader = 'ljk_header';
+	protected $ljk = 'ljk';
 
 	public function __construct()
 	{
@@ -136,7 +138,7 @@ class PaketModel extends CI_Model
 	function getExamWorkList() {
 		$examID = $this->session->userdata('EXAM_ID');
 		$partID = $this->session->userdata('PARTICIPANT_ID');
-		$sql = $this->db->select($this->events . '.*, ' . $this->table . '.DURATION, ' . $this->table . '.MAX_SCORE, ' . $this->table . '.SHEET_NO')->join($this->table, $this->table . '.ID = ' . $this->events . '.SHEET_ID')->where('EVENT_ID', $examID)->where('PARTICIPANT_ID', $partID)->get($this->events);
+		$sql = $this->db->select($this->events . '.*, ' . $this->table . '.DURATION, ' . $this->table . '.MAX_SCORE, ' . $this->table . '.SHEET_NO')->join($this->table, $this->table . '.ID = ' . $this->events . '.SHEET_ID')->where('EVENT_ID', $examID)->where('PARTICIPANT_ID', $partID)->where('COMPLETED_STATUS', 0)->get($this->events);
 		$dataEvent = $sql->result_array();
 		for ($i = 0; $i < count($dataEvent); $i++) {
 			$sql2 = $this->db->where('QSHEET_ID', $dataEvent[$i]['SHEET_ID'])->get($this->package_table);
@@ -153,5 +155,59 @@ class PaketModel extends CI_Model
 			'msg' => $msg
 		);
 		return $response;
+	}
+
+	function submitLjk($kunci, $sheet, $event, $participant, $duration, $answered, $isTrue, $isFalse, $maxScore) {
+		$kunci = json_decode($kunci);
+		// Creating LJK Header
+		$totalSoal = count($kunci);
+		$score = ($maxScore / $totalSoal) * $isTrue;
+		$this->db->trans_start();
+		$header = array(
+			'EVENT_ID' => $event,
+			'PARTICIPANT_ID' => $participant,
+			'SHEET_ID' => $sheet,
+			'TIME_FINISHED' => $duration,
+			'ANSWERED' => $answered,
+			'FALSE_ANSWER' => $isFalse,
+			'TRUE_ANSWER' => $isTrue,
+			'SCORE' => $score
+		);
+		$insertHeader = $this->db->insert($this->ljkHeader, $header);
+		// Inserting LJK
+		if ($insertHeader) {
+			$headerID = $this->db->insert_id();
+			foreach ($kunci as $item) {
+				$ljk = array(
+					'HEADER_ID' => $headerID,
+					'QUESTION_ID' => $item->questionID,
+					'QUESTION_NO' => $item->questionNo,
+					'ANSWER' => isset($item->answerID) ? $item->answerID : null
+				);
+				$this->db->insert($this->ljk, $ljk);
+			}
+			$events = array(
+				'COMPLETED_STATUS' => 1
+			);
+			// Updating Status
+			$updateEvent = $this->db->where('EVENT_ID', $event)->where('PARTICIPANT_ID', $participant)->where('SHEET_ID', $sheet)->update($this->events, $events);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === false) {
+				$this->db->trans_rollback();
+				$res = array(
+					'titlemsg' => 'ERROR',
+					'contentmsg' => 'Something went wrong, please try again',
+					'typemsg' => 'error'
+				);
+			} else {
+				$this->db->trans_commit();
+				$res = array(
+					'titlemsg' => 'TERSIMPAN',
+					'contentmsg' => 'Jawaban Berhasil Di submit, page allowed to leave',
+					'typemsg' => 'success'
+				);
+			}
+		}
+		return $res;
 	}
 }

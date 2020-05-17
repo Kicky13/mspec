@@ -195,4 +195,18 @@ class Soal extends CI_Controller {
 	function doExam($ID) {
 		$this->load->view('SoalWorkView', compact('ID'));
 	}
+
+	function submitLjk() {
+		$kunci = $this->input->post('kunci');
+		$sheet = $this->input->post('sheet');
+		$event = $this->input->post('event');
+		$duration = $this->input->post('duration');
+		$answered = $this->input->post('answered');
+		$trueAns = $this->input->post('trueAnswer');
+		$falseAns = $this->input->post('falseAnswer');
+		$participant = $this->session->userdata('PARTICIPANT_ID');
+		$maxScore = $this->input->post('maxScore');
+		$data = $this->paket->submitLjk($kunci, $sheet, $event, $participant, $duration, $answered, $trueAns, $falseAns, $maxScore);
+		echo json_encode($data);
+	}
 }

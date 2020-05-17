@@ -139,7 +139,6 @@
     var data = [];
     $(function () {
         getSemuaPeserta();
-        checkAdminMenu();
         $('#AVATAR').change(function () {
 			readURL(this);
         });
