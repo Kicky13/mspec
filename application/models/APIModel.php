@@ -89,7 +89,8 @@ class APIModel extends CI_Model {
             ->join($this->soal, $this->soal . '.ID = ' . $this->abs . '.SHEET_ID')
             ->join($this->user, $this->user . '.ID = ' . $this->event . '.EXAMINER_ID')
             ->where($this->peserta . '.ID = ', $regid)
-			->where($this->event . '.EVENT_DATE', 'CURDATE()')
+			->where($this->event . '.EVENT_DATE = CURDATE()')
+			->where($this->event . '.ENCODE', $postData['encode'])
             ->get($this->peserta)
             ->result_array();
         $event = array();

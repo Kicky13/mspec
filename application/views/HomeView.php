@@ -85,6 +85,20 @@
 							<a href="<?=base_url('Schedule'); ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
+					<div class="col-lg-12 col-12">
+						<!-- small box -->
+						<div class="small-box bg-gradient-indigo">
+							<div class="inner">
+								<h3>Result</h3>
+
+								<p>Lihat Hasil Ujian Disini</p>
+							</div>
+							<div class="icon">
+								<i class="ion ion-ios-analytics"></i>
+							</div>
+							<a href="<?=base_url('Result'); ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+						</div>
+					</div>
 				</div>
 				<!-- /.row (main row) -->
 			</div><!-- /.container-fluid -->
