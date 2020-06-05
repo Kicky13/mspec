@@ -20,11 +20,25 @@ class Result extends CI_Controller {
 	}
 
 	function detailResultPage($id) {
-		$this->load->view('detailResultView', compact('id'));
+		$data = $this->result->getSemuaResultTest($id);
+		$colspan = $data['data']['colspan'];
+		$tablehead = $data['data']['tablehead'];
+		$this->load->view('detailResultView', compact('id', 'colspan', 'tablehead'));
 	}
 
 	function getSemuaResultTest($id) {
 		$data = $this->result->getSemuaResultTest($id);
+		echo json_encode($data);
+	}
+
+	function openLJK($id) {
+		$main = $this->result->getLJK($id);
+//		echo json_encode($main);
+		$this->load->view('LJKView', compact('id', 'main'));
+	}
+
+	function getJawabanLJK($id) {
+		$data = $this->result->getJawabanLJK($id);
 		echo json_encode($data);
 	}
 }

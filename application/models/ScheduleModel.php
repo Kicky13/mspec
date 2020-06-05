@@ -42,7 +42,9 @@ class ScheduleModel extends CI_Model {
 			$input = array(
 				"EVENT_ID" => $inputData['EVENT'],
 				"PARTICIPANT_ID" => $inputData['PESERTA'],
-				"SHEET_ID" => $inputData['PAKET']
+				"SHEET_ID" => $inputData['PAKET'],
+				"CERTIFICATE" => $inputData['CERTIFICATE'],
+				"COMPLETED_STATUS" => 0
 			);
 			$insert = $this->db->insert($this->abs, $input);
 			if ($insert) {
@@ -50,7 +52,8 @@ class ScheduleModel extends CI_Model {
 					"ID" => $this->db->insert_id(),
 					"NAME" => $peserta['NAME'],
 					"SHEET_NO" => $paket['SHEET_NO'],
-					"ENCODE" => $event["ENCODE"]
+					"ENCODE" => $event['ENCODE'],
+					"CERTIFICATE" => $inputData['CERTIFICATE']
 				);
 				$message = array(
 					'title' => 'SUCCESS!',
@@ -209,7 +212,7 @@ class ScheduleModel extends CI_Model {
 	}
 
 	function encodeGenerator() {
-		$permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		return substr(str_shuffle($permitted_chars), 0, 10);
 	}
 

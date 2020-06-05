@@ -35,6 +35,7 @@
 							<tr>
 								<th>Nama Peserta</th>
 								<th>Paket</th>
+								<th>Certificate</th>
 								<th>Action</th>
 							</tr>
 							</thead>
@@ -44,6 +45,7 @@
 							<tr>
 								<th>Nama Peserta</th>
 								<th>Paket</th>
+								<th>Certificate</th>
 								<th>Action</th>
 							</tr>
 							</tfoot>
@@ -78,6 +80,15 @@
 										<select id="PAKET" name="PAKET" class="form-control select2bs4">
 											<option selected="selected" disabled>Please Select one</option>
 										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="MAX_SCORE">Certificate</label>
+										<input type="text" placeholder="Nomor Sertifikat Peserta"
+											   class="form-control" id="CERTIFICATE" name="CERTIFICATE">
 									</div>
 								</div>
 							</div>
@@ -136,12 +147,14 @@
                 var formData = new FormData();
                 var selectedPeserta = document.getElementById('PARTICIPANT');
                 var selectedPaket = document.getElementById('PAKET');
+                var certificate = $('#CERTIFICATE').val();
                 var peserta = selectedPeserta.options[selectedPeserta.selectedIndex].value;
                 var paket = selectedPaket.options[selectedPaket.selectedIndex].value;
                 console.log($('#idEvent').val() + '/' + peserta + '/' + paket);
                 formData.append('EVENT', $('#idEvent').val());
                 formData.append('PAKET', paket);
                 formData.append('PESERTA', peserta);
+                formData.append('CERTIFICATE', certificate);
                 submitForm(formData);
             } else {
                 Swal.fire(
@@ -202,6 +215,7 @@
                     "NAME": item.NAME,
                     "SHEET_NO": item.SHEET_NO,
                     "ENCODE": item.ENCODE,
+					"CERTIFICATE": item.CERTIFICATE
                 };
                 Swal.fire(
                     res.message.title,
@@ -312,6 +326,7 @@
         var temp = [
             item.NAME,
             item.SHEET_NO,
+			item.CERTIFICATE,
             btn,
         ];
         data.push(temp);
