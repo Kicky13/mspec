@@ -139,26 +139,61 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<table id="tableJawaban" class="table table-bordered table-striped">
-							<thead>
-							<tr>
-								<th>Opsi</th>
-								<th>Deskripsi Jawaban</th>
-								<th>Nilai</th>
-<!--								<th>Action</th>-->
-							</tr>
-							</thead>
-							<tbody id="tbody-jawaban">
-							</tbody>
-							<tfoot>
-							<tr>
-								<th>Opsi</th>
-								<th>Deskripsi Jawaban</th>
-								<th>Nilai</th>
-<!--								<th>Action</th>-->
-							</tr>
-							</tfoot>
-						</table>
+						<div class="row">
+							<table id="tableJawaban" class="table table-bordered table-striped">
+								<thead>
+								<tr>
+									<th>Opsi</th>
+									<th>Deskripsi Jawaban</th>
+									<th>Nilai</th>
+									<!--								<th>Action</th>-->
+								</tr>
+								</thead>
+								<tbody id="tbody-jawaban">
+								</tbody>
+								<tfoot>
+								<tr>
+									<th>Opsi</th>
+									<th>Deskripsi Jawaban</th>
+									<th>Nilai</th>
+									<!--								<th>Action</th>-->
+								</tr>
+								</tfoot>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<h3>Edit Jawaban</h3>
+								<form role="form" id="update-answer" name="update-question">
+									<div class="form-group">
+										<label for="ABJAD">Abjad</label>
+										<input type="text" id="ABJAD" name="ABJAD" class="form-control" placeholder="Inputkan abjad pada pilihan (Ex: A,B,C,D,E or 1, 2, 3, 4 etc">
+									</div>
+									<div class="form-group">
+										<label for="ANSWER">Content</label>
+										<textarea class="form-control" rows="5" id="ANSWER" name="ANSWER"
+												  placeholder="Deskripsikan Jawaban disini"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="ABJAD">Value</label>
+										<div class="row">
+											<div class="col-md-3">
+												<input type="radio" id="ABJAD" name="ABJAD" placeholder="Inputkan abjad pada pilihan (Ex: A,B,C,D,E or 1, 2, 3, 4 etc">
+												<label> True</label>
+											</div>
+											<div class="col-md-3">
+												<input type="radio" id="ABJAD" name="ABJAD" placeholder="Inputkan abjad pada pilihan (Ex: A,B,C,D,E or 1, 2, 3, 4 etc">
+												<label> False</label>
+											</div>
+										</div>
+									</div>
+									<!-- /.card-body -->
+									<div class="card-footer">
+										<button type="button" id="updateJawaban" class="btn btn-success">Update</button>
+									</div>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- /.modal-content -->
@@ -171,7 +206,7 @@
 					<div class="card-header">
 						<div class="col-12">
 							<div class="col-6">
-								<h3>List Paket Soal</h3>
+								<h3>List Soal</h3>
 							</div>
 							<div class="col-6">
 								<button type="button" data-toggle="modal" data-target="#modal-default"
@@ -185,7 +220,7 @@
 						<table id="tableSoal" class="table table-bordered table-striped">
 							<thead>
 							<tr>
-								<th>No. Paket</th>
+								<th>Kode Soal</th>
 								<th>Pertanyaan</th>
 								<th>Jawaban Benar</th>
 								<th>Deskripsi Jawaban</th>
@@ -196,7 +231,7 @@
 							</tbody>
 							<tfoot>
 							<tr>
-								<th>No. Paket</th>
+								<th>Kode Soal</th>
 								<th>Pertanyaan</th>
 								<th>Jawaban Benar</th>
 								<th>Deskripsi Jawaban</th>
@@ -210,6 +245,38 @@
 				<!-- /.card -->
 			</div>
 			<!-- /.col -->
+		</div>
+		<div class="row" id="update-question-section" hidden>
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<h3>Sunting Pertanyaan</h3>
+					</div>
+					<form role="form" id="update-question" name="update-question">
+						<div class="card-body">
+							<div class="text-center">
+								<img style="margin-bottom: 2%" class="img-fluid" src="" name="IMAGEVIEW" id="IMAGEVIEW"
+									 width="1000" height="1000">
+							</div>
+							<div class="form-group">
+								<div class="custom-file">
+									<input type="file" class="custom-file-input" id="IMAGE" name="IMAGE">
+									<label class="custom-file-label" for="excel">Choose file</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="QUESTION">Question</label>
+								<textarea class="form-control" rows="5" id="QUESTION" name="QUESTION"
+										  placeholder="Deskripsikan Pertanyaan disini"></textarea>
+							</div>
+						</div>
+						<!-- /.card-body -->
+						<div class="card-footer">
+							<button type="button" id="updateSoal" class="btn btn-success">Update</button>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 		<!-- /.row -->
 	</section>
@@ -233,41 +300,56 @@
     var isLoading = false;
     $(function () {
         console.log('Ready');
+        $('#IMAGE').change(function () {
+            readURL(this);
+        });
         getDetailPaket();
         getSoal();
 
         bsCustomFileInput.init();
 
         $('#upload').submit(function (e) {
-			e.preventDefault();
-			var formData = new FormData;
-			const file = document.getElementById('excel');
-			formData.append('uploaded', file.files[0]);
-			console.log(file.files[0]);
-			$.ajax({
-				url: '<?=base_url('Soal/uploadSoal/'); ?>' + idPaket,
-				type: 'POST',
-				enctype: 'multipart/form-data',
-				dataType: 'JSON',
+            e.preventDefault();
+            var formData = new FormData;
+            const file = document.getElementById('excel');
+            formData.append('uploaded', file.files[0]);
+            console.log(file.files[0]);
+            $.ajax({
+                url: '<?=base_url('Soal/uploadSoal/'); ?>' + idPaket,
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                dataType: 'JSON',
                 processData: false,
                 contentType: false,
-				data: formData,
-				beforeSend: function() {
-					document.getElementById('saveUpload').setAttribute('hidden', true);
-				    document.getElementById('isLoading').removeAttribute('hidden');
-				},
-				success: function (res) {
-					console.log(res);
-					Swal.fire(
-					    res.title,
-						res.message,
-						res.type,
-					);
-					if (res.type === 'success') {
-					    window.location.reload();
-					}
+                data: formData,
+                beforeSend: function () {
+                    document.getElementById('saveUpload').setAttribute('hidden', true);
+                    document.getElementById('isLoading').removeAttribute('hidden');
+                },
+                success: function (res) {
+                    console.log(res);
+                    Swal.fire(
+                        res.title,
+                        res.message,
+                        res.type,
+                    );
+                    if (res.type === 'success') {
+                        window.location.reload();
+                    }
                 }
-			});
+            });
+        });
+
+        $('#updateSoal').click(function () {
+            var id = document.getElementById('updateSoal').getAttribute('data-id');
+            var content = $('#QUESTION').val();
+            var img = document.getElementById('IMAGE');
+            console.log(img.files[0]);
+            var formData = new FormData();
+            typeof img.files[0] === 'undefined' ? console.log('image kosong') : formData.append('IMAGE', img.files[0]);
+            formData.append('CONTENT', content);
+            formData.append('ID', id);
+            updateSoal(formData);
         });
 
         $('#update').click(function () {
@@ -295,6 +377,18 @@
         });
     });
 
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#IMAGEVIEW').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     function reloadDataTable() {
         $('#tableSoal').DataTable().destroy();
         $('#tableSoal').DataTable({
@@ -306,6 +400,26 @@
             "info": false,
             "autoWidth": false,
         });
+    }
+
+    function updateSoal(inputData) {
+        $.ajax({
+            type: 'POST',
+            data: inputData,
+            dataType: 'JSON',
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            url: '<?= base_url('Soal/questionUpdate'); ?>',
+            success: function (res) {
+                console.log(res);
+                var alert = res.alert;
+                if (alert.type === 'success') {
+                    swal.fire(alert.header, alert.body, alert.type);
+                    window.location.reload();
+                }
+            }
+        })
     }
 
     function getSoal() {
@@ -376,31 +490,34 @@
         document.location.href = '<?=base_url('Soal/editPagePaket/'); ?>' + idPaket
     }
 
-    function pushToData(item) {
-        var btn = '<div class="btn-group">' +
-            '<button class="btn-info edit" onclick="gotoEditPage(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
-            '<button class="btn-danger deleteButton" onclick="onClickDelete(' + item.ID + ')"><i class="ion-close"></i></button>' +
-            '</div>';
-        var temp = [
-            item.SHEET_NO,
-            item.METHOD,
-            item.MAX_SCORE,
-            item.MAX_SCORE,
-            btn,
-        ];
-        data.push(temp);
+    function editQuestion(id) {
+        document.getElementById('updateSoal').removeAttribute('data-id');
+        var elementID = 'question' + id;
+        var element = document.getElementById(elementID);
+        var content = element.getAttribute('data-content');
+        var img = element.getAttribute('data-image');
+        console.log(img);
+        $('#QUESTION').val(content);
+        document.getElementById('IMAGEVIEW').src = img;
+        document.getElementById('update-question-section').removeAttribute('hidden');
+        console.log(element.getAttribute('data-content'));
+        document.getElementById('updateSoal').setAttribute('data-id', id);
+        window.scrollTo(0, document.body.scrollHeight);
     }
+
     function pushToDataSoal(item) {
+        var img = (item.IMAGE == null) ? '' : item.IMAGE;
         var btn = '<div class="btn-group">' +
-            '<button class="btn-info" onclick="answerDetail(' + item.QUESTION_ID + ')"><i class="ion-eye"></i></button>' +
+            '<button class="btn-success" onclick="answerDetail(' + item.QUESTION_ID + ')"><i class="ion-eye"></i></button>' +
+            '<button class="btn-info" id="question' + item.QUESTION_ID + '" data-image="' + img + '" data-content="' + item.CONTENT + '" onclick="editQuestion(' + item.QUESTION_ID + ')"><i class="ion-edit"></i></button>' +
             '<button class="btn-danger" onclick="onclickDeleteSoal(' + item.QUESTION_ID + ')"><i class="ion-close"></i></button>' +
             '</div>';
         var temp = [
-            item.SHEET_NO,
+            item.SHEET_NO + '-' + item.QUESTION_ID,
             item.CONTENT,
             item.ALPHA,
             item.ANSWER_TEXT,
-			btn,
+            btn,
         ];
         data.push(temp);
     }
@@ -448,11 +565,15 @@
         });
     }
 
-	function answerDetail(id) {
+    function editJawaban(id) {
+
+    }
+
+    function answerDetail(id) {
         $.ajax({
             url: '<?=base_url("Soal/answerDetail/"); ?>' + id,
             type: 'POST',
-			dataType: 'JSON',
+            dataType: 'JSON',
             success: function (res) {
                 if (res.status === 'success') {
                     var body = '';
@@ -464,13 +585,14 @@
                         body += '<td>' + data[i].ALPHA + '</td>';
                         body += '<td>' + data[i].ANSWER_TEXT + '</td>';
                         body += '<td>' + nilai + '</td>';
-						body += '</tr>';
-					}
+                        body += '<td><button onclick="editJawaban(' + data[i].ID + ')" class="btn-success"><i class="ion-edit"></i></button></td>';
+                        body += '</tr>';
+                    }
                     document.getElementById('tbody-jawaban').innerHTML = body;
                     $('#modal-view').modal('show');
-				}
+                }
             }
-        })
+        });
     }
 </Script>
 <!-- /.content-wrapper -->

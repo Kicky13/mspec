@@ -7,6 +7,8 @@ class APIModel extends CI_Model {
 	protected $event = 'events_master';
 	protected $abs = 'events';
 	protected $soal = 'qsheet_master';
+	protected $ljkheader = 'ljk_header';
+	protected $ljk = 'ljk';
 	protected $ques = 'question_master';
 	protected $ans = 'qchoice_master';
 	protected $pack = 'question_package';
@@ -164,11 +166,175 @@ class APIModel extends CI_Model {
 
     function submitLjk($data) {
 		$data = json_decode($data['data']);
-		return $callback = array(
-			'status' => 200,
-			'message' => 'Submit success',
-			'errorMessage' => '',
-			'data' => $data
+		$testID = $this->encryption->decrypt($data->testId);
+		$userID = $this->encryption->decrypt($data->userId);
+		$peserta = $this->db->where('USER_ID', $userID)->get($this->peserta)->row_array();
+		$partID = $peserta['ID'];
+		$kunci = $data->answers;
+		$paket = $this->db->where($this->soal . '.SHEET_NO = "' . $data->questionNo . '"')
+			->get($this->soal)
+			->row_array();
+		$right = $data->right;
+		$wrong = $data->wrong;
+		$totalquest = count($this->db->where('QSHEET_ID', $paket['ID'])->get($this->pack)->result_array());
+		$answered = $totalquest - $data->unanswered;
+		$score = $data->score;
+		$duration = $this->timeFormat($data->timeSpent);
+		$this->db->trans_start();
+		$header = array(
+			'EVENT_ID' => $testID,
+			'PARTICIPANT_ID' => $partID,
+			'SHEET_ID' => $paket['ID'],
+			'TIME_FINISHED' => $duration,
+			'ANSWERED' => $answered,
+			'FALSE_ANSWER' => $wrong,
+			'TRUE_ANSWER' => $right,
+			'SCORE' => $score
 		);
+		$insertHeader = $this->db->insert($this->ljkheader, $header);
+		// Inserting LJK
+		if ($insertHeader) {
+			$headerID = $this->db->insert_id();
+			foreach ($kunci as $item) {
+				$ljk = array(
+					'HEADER_ID' => $headerID,
+					'QUESTION_ID' => $item->questionId,
+					'QUESTION_NO' => $item->questionNumber,
+					'ANSWER' => isset($item->answerCode) ? $this->getAlphabetical($item->answerCode) : null
+				);
+				$this->db->insert($this->ljk, $ljk);
+			}
+			$events = array(
+				'COMPLETED_STATUS' => 1
+			);
+			// Updating Status
+			$this->db->where('EVENT_ID', $testID)->where('PARTICIPANT_ID', $partID)->where('SHEET_ID', $paket['ID'])->update($this->abs, $events);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === false) {
+				$this->db->trans_rollback();
+				$res = array(
+					'status' => 500,
+					'message' => 'Submit failed',
+					'errorMessage' => '',
+					'data' => $data
+				);
+			} else {
+				$this->db->trans_commit();
+				$res = array(
+					'status' => 200,
+					'message' => 'Submit success',
+					'errorMessage' => '',
+					'data' => $data
+				);
+			}
+		} else {
+			$this->db->trans_complete();
+			$this->db->trans_rollback();
+			$res = array(
+				'titlemsg' => 'ERROR',
+				'contentmsg' => 'Something went wrong, please try again',
+				'typemsg' => 'error'
+			);
+		}
+		return $res;
+	}
+
+	function timeFormat($mils) {
+		$seconds = floor($mils/1000);
+		$minutes = floor($seconds/60);
+		$hours = floor($minutes/60);
+		if ($hours > 0) {
+			$time = $hours . ' Hours ' . $minutes . ' minutes ' . $seconds . ' seconds';
+		} else {
+			$time = $minutes . ' minutes ' . $seconds . ' seconds';
+		}
+		return $time;
+	}
+
+	function getAlphabetical($value) {
+		switch ($value) {
+			case 'a':
+				$newvalue = 0;
+				break;
+			case 'b':
+				$newvalue = 1;
+				break;
+			case 'c':
+				$newvalue = 2;
+				break;
+			case 'd':
+				$newvalue = 3;
+				break;
+			case 'e':
+				$newvalue = 4;
+				break;
+			case 'f':
+				$newvalue = 5;
+				break;
+			case 'g':
+				$newvalue = 6;
+				break;
+			case 'h':
+				$newvalue = 7;
+				break;
+			case 'i':
+				$newvalue = 8;
+				break;
+			case 'j':
+				$newvalue = 9;
+				break;
+			case 'k':
+				$newvalue = 10;
+				break;
+			case 'l':
+				$newvalue = 11;
+				break;
+			case 'm':
+				$newvalue = 12;
+				break;
+			case 'n':
+				$newvalue = 13;
+				break;
+			case 'o':
+				$newvalue = 14;
+				break;
+			case 'p':
+				$newvalue = 15;
+				break;
+			case 'q':
+				$newvalue = 16;
+				break;
+			case 'r':
+				$newvalue = 17;
+				break;
+			case 's':
+				$newvalue = 18;
+				break;
+			case 't':
+				$newvalue = 19;
+				break;
+			case 'u':
+				$newvalue = 20;
+				break;
+			case 'v':
+				$newvalue = 21;
+				break;
+			case 'w':
+				$newvalue = 22;
+				break;
+			case 'x':
+				$newvalue = 23;
+				break;
+			case 'y':
+				$newvalue = 24;
+				break;
+			case 'z':
+				$newvalue = 25;
+				break;
+			default:
+				$newvalue = '';
+				break;
+		}
+		return $newvalue;
 	}
 }

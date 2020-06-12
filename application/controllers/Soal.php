@@ -209,4 +209,34 @@ class Soal extends CI_Controller {
 		$data = $this->paket->submitLjk($kunci, $sheet, $event, $participant, $duration, $answered, $trueAns, $falseAns, $maxScore);
 		echo json_encode($data);
 	}
+
+	function questionUpdate() {
+		$update = $this->input->post();
+		$avt = (isset($_FILES['IMAGE']) ? true : false);
+		if ($avt) {
+			$avatar = $_FILES['IMAGE']['name'];
+			$config['file_name'] = $avatar;
+			$config['upload_path']          = './uploads/soal_img/';
+			$config['allowed_types']        = 'jpg|png|gif';
+			$config['max_size']             = 100000;
+			$config['overwrite']			= true;
+			$this->load->library('upload', $config);
+			if ($this->upload->do_upload('IMAGE')) {
+				$filename = base_url() . 'uploads/soal_img/' . $this->upload->data('client_name');
+				$update['IMAGE'] = $filename;
+			} else {
+				$message = array(
+					'title' => 'ERROR!',
+					'content' => 'Upload Failed, Something went wrong',
+					'type' => 'error'
+				);
+				$data = array(
+					'message' => $message,
+					'status' => 'error',
+				);
+			}
+		}
+		$res = $this->paket->questionUpdate($update);
+		echo json_encode($res);
+	}
 }

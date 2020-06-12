@@ -283,7 +283,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 console.log(res);
                 var data = res.data;
                 for (var i = 0; i < data.length; i++) {
-                    document.getElementById(i + '_' + data[i].ANSWER).setAttribute('checked', true);
+                    if (typeof data[i].ANSWER === 'number' || typeof data[i].ANSWER === 'bigint' || typeof data[i].ANSWER === 'string') {
+                        document.getElementById(i + '_' + data[i].ANSWER).setAttribute('checked', true);
+					}
 				}
                 window.print();
             }

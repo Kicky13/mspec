@@ -94,8 +94,6 @@ class User extends CI_Controller {
 					'message' => $message,
 					'status' => 'error',
 				);
-				echo json_encode($data);
-				die();
 			}
 		}
 		$res = $this->user->updatePeserta($update);

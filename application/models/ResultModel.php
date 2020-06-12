@@ -98,12 +98,17 @@ class ResultModel extends CI_Model {
 		}
 		$choiceTotal = $this->db->select('MAX(ANSWER) AS TOTALCHOICE')->where('HEADER_ID', $id)->get($this->tchild)->row_array();
 		$choice = array();
-		for ($i = 0; $i <= $choiceTotal['TOTALCHOICE']; $i++) {
+		if ($choiceTotal['TOTALCHOICE'] <= 5) {
+			$count = 5;
+		} else {
+			$count = $choiceTotal['TOTALCHOICE'];
+		}
+		for ($i = 0; $i <= $count; $i++) {
 			$value = $this->getAlphabetical($i);
 			$choice[$i] = $value;
 		}
 		$ljk['CHOICE'] = $choice;
-		$ljk['TOTALCHOICE'] = $choiceTotal['TOTALCHOICE'];
+		$ljk['TOTALCHOICE'] = $count;
 		$ljk['EVENT_DATE'] = $this->dateFormat($ljk['EVENT_DATE']);
 		return $ljk;
 	}

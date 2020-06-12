@@ -207,6 +207,47 @@ class PaketModel extends CI_Model
 					'typemsg' => 'success'
 				);
 			}
+		} else {
+			$this->db->trans_complete();
+			$this->db->trans_rollback();
+			$res = array(
+				'titlemsg' => 'ERROR',
+				'contentmsg' => 'Something went wrong, please try again',
+				'typemsg' => 'error'
+			);
+		}
+		return $res;
+	}
+
+	function questionUpdate($dataUpdate) {
+		$inputData = array(
+			'CONTENT' => $dataUpdate['CONTENT'],
+			'IMAGE' => $dataUpdate['IMAGE']
+		);
+		$id = $dataUpdate['ID'];
+		$update = $this->db->where('ID', $id)->update($this->soal_table, $inputData);
+		if ($update) {
+			$alert = array(
+				'type' => 'success',
+				'header' => 'UPDATED!',
+				'body' => 'Data Has been updated'
+			);
+			$res = array(
+				'status' => 200,
+				'msg' => 'Update Success',
+				'alert' => $alert
+			);
+		} else {
+			$alert = array(
+				'type' => 'error',
+				'header' => 'FAILED!',
+				'body' => 'Data fail to update'
+			);
+			$res = array(
+				'status' => 500,
+				'msg' => 'Update Failed, Internal server Error',
+				'alert' => $alert
+			);
 		}
 		return $res;
 	}
