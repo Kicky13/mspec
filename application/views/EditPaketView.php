@@ -146,6 +146,7 @@
 									<th>Opsi</th>
 									<th>Deskripsi Jawaban</th>
 									<th>Nilai</th>
+									<th>Action</th>
 									<!--								<th>Action</th>-->
 								</tr>
 								</thead>
@@ -156,12 +157,13 @@
 									<th>Opsi</th>
 									<th>Deskripsi Jawaban</th>
 									<th>Nilai</th>
+									<th>Action</th>
 									<!--								<th>Action</th>-->
 								</tr>
 								</tfoot>
 							</table>
 						</div>
-						<div class="row">
+						<div class="row" id="update-answer-section" hidden>
 							<div class="col-md-12">
 								<h3>Edit Jawaban</h3>
 								<form role="form" id="update-answer" name="update-question">
@@ -175,17 +177,18 @@
 												  placeholder="Deskripsikan Jawaban disini"></textarea>
 									</div>
 									<div class="form-group">
-										<label for="ABJAD">Value</label>
+										<label for="VALUE">Value</label>
 										<div class="row">
 											<div class="col-md-3">
-												<input type="radio" id="ABJAD" name="ABJAD" placeholder="Inputkan abjad pada pilihan (Ex: A,B,C,D,E or 1, 2, 3, 4 etc">
+												<input onclick="changeValue(1)" value="1" type="radio" id="VALUETRUE" name="VALUEOPT">
 												<label> True</label>
 											</div>
 											<div class="col-md-3">
-												<input type="radio" id="ABJAD" name="ABJAD" placeholder="Inputkan abjad pada pilihan (Ex: A,B,C,D,E or 1, 2, 3, 4 etc">
+												<input onclick="changeValue(0)" value="0" type="radio" id="VALUEFALSE" name="VALUEOPT">
 												<label> False</label>
 											</div>
 										</div>
+										<input type="hidden" value="" id="VALUE" name="VALUE">
 									</div>
 									<!-- /.card-body -->
 									<div class="card-footer">
@@ -340,6 +343,20 @@
             });
         });
 
+        $('#updateJawaban').click(function () {
+			var id = document.getElementById('updateJawaban').getAttribute('data-id');
+			var content = $('#ANSWER').val();
+			var abjad = $('#ABJAD').val();
+			var value = $('#VALUE').val();
+			var updateBody = {
+			    ID: id,
+			    ANSWER_TEXT: content,
+				ALPHA: abjad,
+				VALUE: value
+			}
+			updateJawaban(updateBody);
+        });
+
         $('#updateSoal').click(function () {
             var id = document.getElementById('updateSoal').getAttribute('data-id');
             var content = $('#QUESTION').val();
@@ -389,6 +406,11 @@
         }
     }
 
+    function refreshData() {
+		data = [];
+		getSoal();
+    }
+
     function reloadDataTable() {
         $('#tableSoal').DataTable().destroy();
         $('#tableSoal').DataTable({
@@ -416,7 +438,9 @@
                 var alert = res.alert;
                 if (alert.type === 'success') {
                     swal.fire(alert.header, alert.body, alert.type);
-                    window.location.reload();
+                    document.getElementById('update-question-section').setAttribute('hidden', true);
+                    // window.location.reload();
+					refreshData();
                 }
             }
         })
@@ -542,6 +566,10 @@
         });
     }
 
+    function changeValue(value) {
+		document.getElementById('VALUE').value = value;
+    }
+
     function deleteSoal(inputData) {
         $.ajax({
             url: '<?=base_url("Soal/deleteSoal"); ?>',
@@ -559,14 +587,51 @@
                     'success'
                 );
                 if (res.status === 'success') {
-                    window.location.reload();
+                    // window.location.reload();
+					refreshData();
                 }
             }
         });
     }
 
-    function editJawaban(id) {
+    function updateJawaban(body) {
+		$.ajax({
+			url: '<?= base_url('Soal/answerUpdate'); ?>',
+			dataType: 'JSON',
+			type: 'POST',
+			data: body,
+			success: function (res) {
+				console.log(res);
+				var alert = res.alert;
+				swal.fire(
+				    alert.header,
+					alert.body,
+					alert.type
+				);
+				document.getElementById('update-answer-section').setAttribute('hidden', true);
+				$('#modal-view').modal('hide');
+				refreshData();
+            }
+		});
+    }
 
+    function editJawaban(id) {
+        document.getElementById('VALUETRUE').checked = false;
+        document.getElementById('VALUEFALSE').checked = false;
+		var elementID = document.getElementById('jawaban' + id);
+		var content = elementID.getAttribute('data-content');
+		var abjad = elementID.getAttribute('data-code');
+		var value = elementID.getAttribute('data-value');
+		$('#ABJAD').val(abjad);
+		$('#ANSWER').val(content);
+		$('#VALUE').val(value);
+		document.getElementById('updateJawaban').setAttribute('data-id', id);
+        if (value == 1) {
+		    document.getElementById('VALUETRUE').checked = true;
+		} else {
+		    document.getElementById('VALUEFALSE').checked = true;
+		}
+		document.getElementById('update-answer-section').removeAttribute('hidden');
     }
 
     function answerDetail(id) {
@@ -585,10 +650,11 @@
                         body += '<td>' + data[i].ALPHA + '</td>';
                         body += '<td>' + data[i].ANSWER_TEXT + '</td>';
                         body += '<td>' + nilai + '</td>';
-                        body += '<td><button onclick="editJawaban(' + data[i].ID + ')" class="btn-success"><i class="ion-edit"></i></button></td>';
+                        body += '<td><button data-value="' + data[i].VALUE + '" data-code="' + data[i].ALPHA + '" data-content="' + data[i].ANSWER_TEXT + '" id="jawaban' + data[i].ID + '" onclick="editJawaban(' + data[i].ID + ')" class="btn-success"><i class="ion-edit"></i></button></td>';
                         body += '</tr>';
                     }
                     document.getElementById('tbody-jawaban').innerHTML = body;
+                    document.getElementById('update-answer-section').setAttribute('hidden', true);
                     $('#modal-view').modal('show');
                 }
             }

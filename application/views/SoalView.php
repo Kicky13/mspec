@@ -244,9 +244,14 @@
 		document.location.href = '<?=base_url('Soal/editPagePaket/'); ?>' + idPaket
     }
 
+    function cetakSoal(id) {
+        document.location.href = '<?=base_url('Soal/cetakSoal/'); ?>' + id
+    }
+
 	function pushToData(item) {
         var btn  = '<div class="btn-group">' +
 			'<button class="btn-info edit" onclick="gotoEditPage(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
+            '<button class="btn-success" onclick="cetakSoal(' + item.ID + ')"><i class="ion-printer"></i></button>' +
 			'<button class="btn-danger deleteButton" onclick="onClickDelete(' + item.ID + ')"><i class="ion-close"></i></button>' +
 			'</div>';
 		var temp = [

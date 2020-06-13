@@ -239,4 +239,16 @@ class Soal extends CI_Controller {
 		$res = $this->paket->questionUpdate($update);
 		echo json_encode($res);
 	}
+
+	function answerUpdate() {
+		$data = $this->paket->answerUpdate($this->input->post());
+		echo json_encode($data);
+	}
+
+	function cetakSoal($id) {
+		$data = $this->paket->dataSoal($id);
+		$header = $data['HEADER'];
+		$soal = $data['SOAL'];
+		$this->load->view('SoalCetak', compact('header', 'soal'));
+	}
 }

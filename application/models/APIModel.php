@@ -178,7 +178,7 @@ class APIModel extends CI_Model {
 		$wrong = $data->wrong;
 		$totalquest = count($this->db->where('QSHEET_ID', $paket['ID'])->get($this->pack)->result_array());
 		$answered = $totalquest - $data->unanswered;
-		$score = $data->score;
+		$score = $right / $totalquest * $paket['MAX_SCORE'];
 		$duration = $this->timeFormat($data->timeSpent);
 		$this->db->trans_start();
 		$header = array(

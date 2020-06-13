@@ -251,4 +251,51 @@ class PaketModel extends CI_Model
 		}
 		return $res;
 	}
+
+	function answerUpdate($data) {
+		$body = array(
+			'ALPHA' => $data['ALPHA'],
+			'ANSWER_TEXT' => $data['ANSWER_TEXT'],
+			'VALUE' => $data['VALUE']
+		);
+		$update = $this->db->where('ID', $data['ID'])->update($this->answer_table, $body);
+		if ($update) {
+			$alert = array(
+				'header' => 'UPDATED!',
+				'body' => 'Data has been updated',
+				'type' => 'success'
+			);
+			$res = array(
+				'status' => 200,
+				'msg' => 'Update Success',
+				'alert' => $alert
+			);
+		} else {
+			$alert = array(
+				'header' => 'FAILED!',
+				'body' => 'Data has fail to updated',
+				'type' => 'error'
+			);
+			$res = array(
+				'status' => 500,
+				'msg' => 'Update Failed',
+				'alert' => $alert
+			);
+		}
+		return $res;
+	}
+
+	function dataSoal($id) {
+		$header = $this->db->where('ID', $id)->get($this->table)->row_array();
+		$package = $this->db->select($this->soal_table . '.*, ' . $this->package_table . '.QSHEET_ID')->join($this->soal_table, $this->soal_table . '.ID = ' . $this->package_table . '.QUESTION_ID')->where($this->package_table . '.QSHEET_ID', $id)->get($this->package_table)->result_array();
+		for ($i = 0; $i < count($package); $i++) {
+			$answer = $this->db->where('QUESTION_ID', $package[$i]['ID'])->order_by('ALPHA', 'ASC')->get($this->answer_table)->result_array();
+			$package[$i]['ANSWER'] = $answer;
+		}
+		$res = array(
+			'HEADER' => $header,
+			'SOAL' => $package
+		);
+		return $res;
+	}
 }
