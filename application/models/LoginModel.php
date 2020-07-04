@@ -54,23 +54,34 @@ class LoginModel extends CI_Model {
 		if (count($sql)) {
 			if ($data['password'] == $this->encryption->decrypt($sql[0]['PASSWORD'])) {
 				if ($sql[0]['EVENT_DATE'] == date('Y-m-d')) {
-					$session = array(
-						'USERNAME' => $sql[0]['USERNAME'],
-						'ROLE' => $sql[0]['ROLE'],
-						'ID' => $sql[0]['ID'],
-						'NAME' => $sql[0]['NAME'],
-						'EXAM_ID' => $sql[0]['EXAM_ID'],
-						'ENCODE' => $sql[0]['ENCODE'],
-						'PARTICIPANT_ID' => $sql[0]['PART_ID'],
-						'COMPANY' => $sql[0]['COMPANY'],
-						'COMPANY_ADDRESS' => $sql[0]['COMPANY_LOCATION'],
-						'AVATAR' => $sql[0]['AVATAR'],
-						'EMAIL' => $sql[0]['EMAIL']
-					);
-					$this->session->set_userdata($session);
-					$msg = 'loggedIn';
-					$err = false;
-					$element = 'none';
+					if ($sql[0]['ACTIVE_TOKEN'] == null) {
+						$input = array(
+							"LAST_LOGIN" => date('Y-m-d H:i:s'),
+							"ACTIVE_TOKEN" => $this->tokenGenerator()
+						);
+						$this->db->where('ID', $sql[0]['ID'])->update($this->table, $input);
+						$session = array(
+							'USERNAME' => $sql[0]['USERNAME'],
+							'ROLE' => $sql[0]['ROLE'],
+							'ID' => $sql[0]['ID'],
+							'NAME' => $sql[0]['NAME'],
+							'EXAM_ID' => $sql[0]['EXAM_ID'],
+							'ENCODE' => $sql[0]['ENCODE'],
+							'PARTICIPANT_ID' => $sql[0]['PART_ID'],
+							'COMPANY' => $sql[0]['COMPANY'],
+							'COMPANY_ADDRESS' => $sql[0]['COMPANY_LOCATION'],
+							'AVATAR' => $sql[0]['AVATAR'],
+							'EMAIL' => $sql[0]['EMAIL']
+						);
+						$this->session->set_userdata($session);
+						$msg = 'loggedIn';
+						$err = false;
+						$element = 'none';
+					} else {
+						$err = true;
+						$msg = 'This User already logged in another device';
+						$element = 'none';
+					}
 				} else {
 					$err = true;
 					$msg = 'Not in Test Date';
@@ -91,5 +102,19 @@ class LoginModel extends CI_Model {
 			'error' => $err,
 			'element' => $element
 		);
+	}
+
+	function tokenGenerator() {
+		$permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		return $this->encryption->encrypt(substr(str_shuffle($permitted_chars), 0, 6));
+	}
+
+	function doLogout() {
+		$userID = $this->session->userdata('ID');
+		$input = array(
+			"ACTIVE_TOKEN" => null
+		);
+		$this->db->where('ID', $userID)->update($this->table, $input);
+		$this->session->sess_destroy();
 	}
 }

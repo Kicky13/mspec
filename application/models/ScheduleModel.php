@@ -270,7 +270,7 @@ class ScheduleModel extends CI_Model {
 			->get($this->abs)
 			->row_array();
 		$quesPack = $this->db->select($this->quespack . '.*, ' . $this->question . '.CONTENT, ' . $this->question . '.IMAGE')->join($this->question, $this->question . '.ID = ' . $this->quespack . '.QUESTION_ID')->where($this->quespack . '.QSHEET_ID',  $events['SHEET_ID'])->get($this->quespack)->result_array();
-		$quesPack = $this->shuffle_array($quesPack);
+//		$quesPack = $this->shuffle_array($quesPack);
 		$questions = array();
 		$number = 1;
 		foreach ($quesPack as $item) {

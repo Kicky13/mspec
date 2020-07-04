@@ -14,6 +14,11 @@ class API extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	function doLogout() {
+		$data = $this->api->doLogout($this->input->post('ID'));
+		echo json_encode($data);
+	}
+
 	function getTestInfo() {
 	    $data = $this->api->getTestInfo($this->input->post());
 	    echo json_encode($data);

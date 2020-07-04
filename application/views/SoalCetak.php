@@ -18,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			border-color: black;
 			border-style: solid;
 		}
-		h5 {
+		h5, dd {
 			font-weight: bold;
 		}
 	</style>
@@ -101,6 +101,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			</div>
 			<div class="col-md-2"></div>
 		</div>
+		<!-- Rules -->
+		<div class="row" style="margin-top: 1%">
+			<div class="col-md-2"></div>
+			<div class="col-md-8 title-box">
+				<input type="hidden" id="rulesContent" value="<?= $header['RULES']; ?>">
+				<d1 class="row">
+					<dd class="col-md-12" id="rules"></dd>
+				</d1>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+		<!-- Rules End -->
 		<div class="row" style="margin-top: 4%">
 			<div class="col-md-1"></div>
 			<div class="col-md-10">
@@ -169,7 +181,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script>
     $(function () {
         console.log('Ready');
+		writeRules();
+		window.print();
     });
+
+    function writeRules() {
+		var rules = $('#rulesContent').val();
+		document.getElementById('rules').innerText = rules;
+    }
 </script>
 </body>
 

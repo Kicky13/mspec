@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ResultModel extends CI_Model {
-	protected $table = 'ljk_header', $tchild = 'ljk', $mEvent = 'events_master', $mUser = 'user_master', $mPart = 'participant_master', $event = 'events', $mSheet = 'qsheet_master', $package = 'question_package';
+	protected $table = 'ljk_header', $tchild = 'ljk', $mEvent = 'events_master', $mUser = 'user_master', $mPart = 'participant_master', $event = 'events', $mSheet = 'qsheet_master', $package = 'question_package', $key = 'qchoice_master';
 
 	public function __construct()
 	{
@@ -72,6 +72,19 @@ class ResultModel extends CI_Model {
 
 	function getJawabanLJK($id) {
 		$jawaban = $this->db->where('HEADER_ID', $id)->get($this->tchild)->result_array();
+		for ($i = 0; $i < count($jawaban); $i++) {
+			$answerKey = $this->db->where('QUESTION_ID', $jawaban[$i]['QUESTION_ID'])->where('VALUE', 1)->get($this->key)->row_array();
+			if ($jawaban[$i]['ANSWER'] !== null) {
+				$value = $this->getIndex(strtolower($answerKey['ALPHA']));
+				if ($jawaban[$i]['ANSWER'] = $value) {
+					$jawaban[$i]['VALUE'] = true;
+				} else {
+					$jawaban[$i]['VALUE'] = false;
+				}
+			} else {
+				$jawaban[$i]['VALUE'] = null;
+			}
+		}
 		$response = array(
 			'status' => 200,
 			'msg' => 'Get Data Success',
@@ -81,7 +94,7 @@ class ResultModel extends CI_Model {
 	}
 
 	function getLJK($id) {
-		$ljk = $this->db->select($this->mPart . '.*, ' . $this->mSheet . '.*, ' . $this->mEvent . '.*, ' . $this->table . '.ID AS HEADER_ID, COUNT(*) AS TOTALQUEST, ' . $this->mUser . '.NAME AS EXAMINER')
+		$ljk = $this->db->select($this->mPart . '.*, ' . $this->mSheet . '.*, ' . $this->mEvent . '.*, ' . $this->table . '.ID AS HEADER_ID, COUNT(*) AS TOTALQUEST, ' . $this->mUser . '.NAME AS EXAMINER, ' . $this->table . '.SCORE')
 			->join($this->mSheet, $this->mSheet . '.ID = ' . $this->table . '.SHEET_ID')
 			->join($this->mEvent, $this->mEvent . '.ID = ' . $this->table . '.EVENT_ID')
 			->join($this->mUser, $this->mUser . '.ID = ' . $this->mEvent . '.EXAMINER_ID')
@@ -192,6 +205,93 @@ class ResultModel extends CI_Model {
 				break;
 			case 25:
 				$newvalue = 'Z';
+				break;
+			default:
+				$newvalue = '';
+				break;
+		}
+		return $newvalue;
+	}
+
+	function getIndex($value) {
+		switch ($value) {
+			case 'a':
+				$newvalue = 0;
+				break;
+			case 'b':
+				$newvalue = 1;
+				break;
+			case 'c':
+				$newvalue = 2;
+				break;
+			case 'd':
+				$newvalue = 3;
+				break;
+			case 'e':
+				$newvalue = 4;
+				break;
+			case 'f':
+				$newvalue = 5;
+				break;
+			case 'g':
+				$newvalue = 6;
+				break;
+			case 'h':
+				$newvalue = 7;
+				break;
+			case 'i':
+				$newvalue = 8;
+				break;
+			case 'j':
+				$newvalue = 9;
+				break;
+			case 'k':
+				$newvalue = 10;
+				break;
+			case 'l':
+				$newvalue = 11;
+				break;
+			case 'm':
+				$newvalue = 12;
+				break;
+			case 'n':
+				$newvalue = 13;
+				break;
+			case 'o':
+				$newvalue = 14;
+				break;
+			case 'p':
+				$newvalue = 15;
+				break;
+			case 'q':
+				$newvalue = 16;
+				break;
+			case 'r':
+				$newvalue = 17;
+				break;
+			case 's':
+				$newvalue = 18;
+				break;
+			case 't':
+				$newvalue = 19;
+				break;
+			case 'u':
+				$newvalue = 20;
+				break;
+			case 'v':
+				$newvalue = 21;
+				break;
+			case 'w':
+				$newvalue = 22;
+				break;
+			case 'x':
+				$newvalue = 23;
+				break;
+			case 'y':
+				$newvalue = 24;
+				break;
+			case 'z':
+				$newvalue = 25;
 				break;
 			default:
 				$newvalue = '';

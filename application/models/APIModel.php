@@ -19,37 +19,65 @@ class APIModel extends CI_Model {
 		$this->load->library('encryption');
 	}
 
+	function doLogout($id) {
+		$input = array(
+			"ACTIVE_TOKEN" => null
+		);
+		$id = $this->encryption->decrypt($id);
+		$update = $this->db->where('ID', $id)->update($this->user, $input);
+		if ($update) {
+			$callback = array(
+				'status' => 200,
+				'message' => 'Logout Success',
+				'errorMessage' => '',
+			);
+		} else {
+			$callback = array(
+				'status' => 500,
+				'message' => 'Logout Failed',
+				'errorMessage' => '',
+			);
+		}
+		return $callback;
+	}
+
 	public function doLogin($data) {
 		$sql = $this->db->select($this->user . '.*, ' . $this->peserta . '.ID as regID')->join($this->peserta, $this->peserta . '.USER_ID = ' . $this->user . '.ID')->where('USERNAME', $data['username'])->where('ROLE', 'PESERTA')->get($this->user)->result_array();
 		if (count($sql)) {
 		    $user = $sql[0];
 			$encode = $data['encode'];
-			$ujian = $this->db->join($this->event, $this->event . '.ID = ' . $this->abs . '.EVENT_ID')->where($this->abs . '.PARTICIPANT_ID', $user['regID'])->where($this->event . '.ENCODE', $encode)->get($this->abs)->result_array();
+			$ujian = $this->db->join($this->event, $this->event . '.ID = ' . $this->abs . '.EVENT_ID')->where($this->abs . '.PARTICIPANT_ID', $user['regID'])->where($this->event . '.ENCODE', $encode)->where('COMPLETED_STATUS', 0)->get($this->abs)->result_array();
 			$queryUjian = $this->db->last_query();
 			if (count($ujian)) {
 				if ($ujian[0]['EVENT_DATE'] == date('Y-m-d')) {
-					if ($data['password'] == $this->encryption->decrypt($sql[0]['PASSWORD'])) {
-						$token = $this->tokenGenerator();
-						$input = array(
-							"LAST_LOGIN" => date('Y-m-d H:i:s'),
-							"ACTIVE_TOKEN" => $token
-						);
-						$this->db->where('ID', $user['ID'])->update($this->user, $input);
-						$peserta = $this->db->where('USER_ID', $user['ID'])->get($this->peserta)->row_array();
-						$user['ID'] = $this->encryption->encrypt($user['ID']);
-						$user['REGISTER_ID'] = $this->encryption->encrypt($peserta['ID']);
-						$user['ACTIVE_TOKEN'] = $token;
-						$user['STATUS'] = $peserta['STATUS'];
-						$user['AVATAR'] = $peserta['AVATAR'];
-						$user['COMPANY'] = array(
-							"NAME" => $peserta['COMPANY'],
-							"ADDRESS" => $peserta['COMPANY_LOCATION']
-						);
-						$res = array(
-							"user" => $user,
-						);
-						$msg = 'Berhasil mengambil data';
-						$err = null;
+					if ($data['password'] == $this->encryption->decrypt($user['PASSWORD'])) {
+						if ($user['ACTIVE_TOKEN'] == null) {
+							$token = $this->tokenGenerator();
+							$input = array(
+								"LAST_LOGIN" => date('Y-m-d H:i:s'),
+								"ACTIVE_TOKEN" => $token
+							);
+							$this->db->where('ID', $user['ID'])->update($this->user, $input);
+							$peserta = $this->db->where('USER_ID', $user['ID'])->get($this->peserta)->row_array();
+							$user['ID'] = $this->encryption->encrypt($user['ID']);
+							$user['REGISTER_ID'] = $this->encryption->encrypt($peserta['ID']);
+							$user['ACTIVE_TOKEN'] = $token;
+							$user['STATUS'] = $peserta['STATUS'];
+							$user['AVATAR'] = $peserta['AVATAR'];
+							$user['COMPANY'] = array(
+								"NAME" => $peserta['COMPANY'],
+								"ADDRESS" => $peserta['COMPANY_LOCATION']
+							);
+							$res = array(
+								"user" => $user,
+							);
+							$msg = 'Berhasil mengambil data';
+							$err = null;
+						} else {
+							$err = 'This User Already Logged in another device';
+							$msg = 'Login Gagal';
+							$res = null;
+						}
 					} else {
 						$err = 'Incorect Password';
 						$msg = 'Login Gagal';
@@ -61,7 +89,7 @@ class APIModel extends CI_Model {
 					$res = null;
 				}
 			} else {
-				$err = "Username hasn't any test yet";
+				$err = "Username hasn't any avaible test yet";
 				$msg = 'Login Gagal';
 				$res = null;
 			}
@@ -123,15 +151,21 @@ class APIModel extends CI_Model {
                     "rules" => $item['RULES']
                 );
                 $sqlques = $this->db->join($this->ques, $this->ques . '.ID = ' . $this->pack . '.QUESTION_ID')->where($this->pack . '.QSHEET_ID', $item['SHEET_ID'])->get($this->pack)->result_array();
-                $sqlques = $this->shuffle_array($sqlques);
+//                $sqlques = $this->shuffle_array($sqlques);
                 $ques = array();
                 $number = 1;
                 foreach ($sqlques as $sqlque) {
+					$img = array();
+                	$tempImg = array(
+						"code" => "img_" . $number,
+						"url" => $sqlque['IMAGE']
+					);
+                	array_push($img, $tempImg);
                     $que = array(
                         "questionId" => $sqlque['ID'],
                         "number" => $number,
                         "question" => $sqlque['CONTENT'],
-                        "image" => $sqlque['IMAGE']
+                        "images" => $img
                     );
                     $ans = $this->db->select('ALPHA as code, ANSWER_TEXT as answer, VALUE as value')->where('QUESTION_ID', $sqlque['ID'])->order_by('ALPHA')->get($this->ans)->result_array();
                     $que['answer'] = $ans;

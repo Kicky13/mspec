@@ -33,7 +33,7 @@ class Login extends CI_Controller {
 	}
 
 	function doLogout() {
-		$this->session->sess_destroy();
+		$this->login->doLogout();
 		redirect('Login');
 	}
 }

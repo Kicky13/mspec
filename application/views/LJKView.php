@@ -82,6 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</div>
 					<div class="col-md-7">
 						<h5><?= $main['METHOD']; ?></h5>
+						<input type="hidden" id="rulecontent" value="<?=$main['RULES']; ?>">
 					</div>
 				</div>
 				<div class="row">
@@ -182,7 +183,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<h5>:</h5>
 					</div>
 					<div class="col-md-6">
-						<h5></h5>
+						<h5><?= $main['SCORE']; ?></h5>
 					</div>
 				</div>
 				<div class="row">
@@ -200,6 +201,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				</div>
 			</div>
 		</div>
+<!--		<div class="row">-->
+<!--			<div class="card" style="margin-left: 1%; margin-right: 2%; margin-top: 1%">-->
+<!--				<div class="card-body border border-dark">-->
+<!--					<d1 class="row">-->
+<!--						<dd class="col-md-12" id="rules"></dd>-->
+<!--					</d1>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</div>-->
 		<div class="row" style="margin-top: 2%">
 			<div class="col-md-1"></div>
 			<div class="col-md-5" id="leftsidex">
@@ -215,7 +225,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<tbody>
 					<?php for($i = 0; $i < $main['SIDENUMBER']; $i++) {
 						echo '<tr>';
-						echo '<td>' . ($i + 1) .'</td>';
+						echo '<td id="no' . ($i + 1) . '">' . ($i + 1) .'</td>';
 						for ($j = 0; $j <= $main['TOTALCHOICE']; $j++) {
 							$idRadio = $i . '_' .$j;
 							echo '<td>
@@ -240,7 +250,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<tbody>
 					<?php for($i = 0; $i < $main['SIDENUMBER']; $i++) {
 						echo '<tr>';
-						echo '<td>' . ($i + 1 + $main['SIDENUMBER']) .'</td>';
+						echo '<td id="no' . ($i + 1 + $main['SIDENUMBER']) .'">' . ($i + 1 + $main['SIDENUMBER']) .'</td>';
 						for ($j = 0; $j <= $main['TOTALCHOICE']; $j++) {
 							$idRadio = ($i + $main['SIDENUMBER']) . '_' .$j;
 							echo '<td>
@@ -272,7 +282,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     $(function () {
         console.log('Ready');
         getSemuaJawaban();
+        // writeRules();
     });
+
+    function writeRules() {
+		var rules = $('#rulecontent').val();
+		document.getElementById('rules').innerText = rules;
+    }
+
     function getSemuaJawaban() {
         var idHeader = $('#idHeader').val();
         $.ajax({
@@ -285,6 +302,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 for (var i = 0; i < data.length; i++) {
                     if (typeof data[i].ANSWER === 'number' || typeof data[i].ANSWER === 'bigint' || typeof data[i].ANSWER === 'string') {
                         document.getElementById(i + '_' + data[i].ANSWER).setAttribute('checked', true);
+                        if (data[i].VALUE === false) {
+                            document.getElementById('no' + data[i].QUESTION_NO).setAttribute('style', 'color: red');
+						}
 					}
 				}
                 window.print();

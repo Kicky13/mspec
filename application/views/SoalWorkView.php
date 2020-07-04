@@ -143,9 +143,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<dd id="minutes_done" class="col-sm-8">25 Mins</dd>
 									<dt class="col-sm-4">Answered</dt>
 									<dd id="answered_quest" class="col-sm-8">25</dd>
-									<dt class="col-sm-4">Is True</dt>
+									<dt class="col-sm-4">Right Answer</dt>
 									<dd id="true_quest" class="col-sm-8">10</dd>
-									<dt class="col-sm-4">Is False</dt>
+									<dt class="col-sm-4">Wrong Answer</dt>
 									<dd id="false_quest" class="col-sm-8">23</dd>
 									<dt class="col-sm-4">Answered Percentage</dt>
 									<dd id="percentage_answered" class="col-sm-8">50%</dd>

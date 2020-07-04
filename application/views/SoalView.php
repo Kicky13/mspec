@@ -245,7 +245,8 @@
     }
 
     function cetakSoal(id) {
-        document.location.href = '<?=base_url('Soal/cetakSoal/'); ?>' + id
+        //document.location.href = '<?//=base_url('Soal/cetakSoal/'); ?>//' + id
+		window.open('<?=base_url('Soal/cetakSoal/'); ?>' + id, '_blank');
     }
 
 	function pushToData(item) {
