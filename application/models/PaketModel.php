@@ -254,9 +254,7 @@ class PaketModel extends CI_Model
 
 	function answerUpdate($data) {
 		$body = array(
-			'ALPHA' => $data['ALPHA'],
-			'ANSWER_TEXT' => $data['ANSWER_TEXT'],
-			'VALUE' => $data['VALUE']
+			'ANSWER_TEXT' => $data['ANSWER_TEXT']
 		);
 		$update = $this->db->where('ID', $data['ID'])->update($this->answer_table, $body);
 		if ($update) {

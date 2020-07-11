@@ -144,6 +144,7 @@ class ScheduleModel extends CI_Model {
 			"EVENT_DATE" => $date,
 			"EVENT_START" => $startTime,
 			"EVENT_END" => $endTime,
+			"EVENT_LOCATION" => $data['EVENT_LOCATION'],
 			"EXAMINER_ID" => $penguji[0]
 		);
 		$insert = $this->db->insert($this->table, $inputData);
@@ -176,6 +177,7 @@ class ScheduleModel extends CI_Model {
 			"EVENT_DATE" => $date,
 			"EVENT_START" => $startTime,
 			"EVENT_END" => $endTime,
+			"EVENT_LOCATION" => $data['EVENT_LOCATION'],
 			"EXAMINER_ID" => $penguji[0]
 		);
 		$update = $this->db->where('ID', $id)->update($this->table, $inputData);

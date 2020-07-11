@@ -76,7 +76,7 @@ class ResultModel extends CI_Model {
 			$answerKey = $this->db->where('QUESTION_ID', $jawaban[$i]['QUESTION_ID'])->where('VALUE', 1)->get($this->key)->row_array();
 			if ($jawaban[$i]['ANSWER'] !== null) {
 				$value = $this->getIndex(strtolower($answerKey['ALPHA']));
-				if ($jawaban[$i]['ANSWER'] = $value) {
+				if ($jawaban[$i]['ANSWER'] == $value) {
 					$jawaban[$i]['VALUE'] = true;
 				} else {
 					$jawaban[$i]['VALUE'] = false;
@@ -94,7 +94,7 @@ class ResultModel extends CI_Model {
 	}
 
 	function getLJK($id) {
-		$ljk = $this->db->select($this->mPart . '.*, ' . $this->mSheet . '.*, ' . $this->mEvent . '.*, ' . $this->table . '.ID AS HEADER_ID, COUNT(*) AS TOTALQUEST, ' . $this->mUser . '.NAME AS EXAMINER, ' . $this->table . '.SCORE')
+		$ljk = $this->db->select($this->mPart . '.*, ' . $this->mSheet . '.*, ' . $this->mEvent . '.*, ' . $this->table . '.ID AS HEADER_ID, COUNT(*) AS TOTALQUEST, ' . $this->mUser . '.NAME AS EXAMINER, ' . $this->table . '.SCORE, ' . $this->mEvent . '.EVENT_LOCATION')
 			->join($this->mSheet, $this->mSheet . '.ID = ' . $this->table . '.SHEET_ID')
 			->join($this->mEvent, $this->mEvent . '.ID = ' . $this->table . '.EVENT_ID')
 			->join($this->mUser, $this->mUser . '.ID = ' . $this->mEvent . '.EXAMINER_ID')

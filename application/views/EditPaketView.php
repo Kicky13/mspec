@@ -84,6 +84,11 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label for="REFERENCE">Reference</label>
+								<input type="text" class="form-control" id="REFERENCE" name="REFERENCE"
+									   placeholder="Masukkan Referensi">
+							</div>
+							<div class="form-group">
 								<label for="RULES">Rules</label>
 								<textarea class="form-control" rows="5" id="RULES" name="RULES"
 										  placeholder="Deskripsikan Rule Test disini"></textarea>
@@ -168,28 +173,24 @@
 								<h3>Edit Jawaban</h3>
 								<form role="form" id="update-answer" name="update-question">
 									<div class="form-group">
-										<label for="ABJAD">Abjad</label>
-										<input type="text" id="ABJAD" name="ABJAD" class="form-control" placeholder="Inputkan abjad pada pilihan (Ex: A,B,C,D,E or 1, 2, 3, 4 etc">
-									</div>
-									<div class="form-group">
 										<label for="ANSWER">Content</label>
 										<textarea class="form-control" rows="5" id="ANSWER" name="ANSWER"
 												  placeholder="Deskripsikan Jawaban disini"></textarea>
 									</div>
-									<div class="form-group">
-										<label for="VALUE">Value</label>
-										<div class="row">
-											<div class="col-md-3">
-												<input onclick="changeValue(1)" value="1" type="radio" id="VALUETRUE" name="VALUEOPT">
-												<label> True</label>
-											</div>
-											<div class="col-md-3">
-												<input onclick="changeValue(0)" value="0" type="radio" id="VALUEFALSE" name="VALUEOPT">
-												<label> False</label>
-											</div>
-										</div>
-										<input type="hidden" value="" id="VALUE" name="VALUE">
-									</div>
+<!--									<div class="form-group">-->
+<!--										<label for="VALUE">Value</label>-->
+<!--										<div class="row">-->
+<!--											<div class="col-md-3">-->
+<!--												<input onclick="changeValue(1)" value="1" type="radio" id="VALUETRUE" name="VALUEOPT">-->
+<!--												<label> True</label>-->
+<!--											</div>-->
+<!--											<div class="col-md-3">-->
+<!--												<input onclick="changeValue(0)" value="0" type="radio" id="VALUEFALSE" name="VALUEOPT">-->
+<!--												<label> False</label>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--										<input type="hidden" value="" id="VALUE" name="VALUE">-->
+<!--									</div>-->
 									<!-- /.card-body -->
 									<div class="card-footer">
 										<button type="button" id="updateJawaban" class="btn btn-success">Update</button>
@@ -346,13 +347,9 @@
         $('#updateJawaban').click(function () {
 			var id = document.getElementById('updateJawaban').getAttribute('data-id');
 			var content = $('#ANSWER').val();
-			var abjad = $('#ABJAD').val();
-			var value = $('#VALUE').val();
 			var updateBody = {
 			    ID: id,
 			    ANSWER_TEXT: content,
-				ALPHA: abjad,
-				VALUE: value
 			}
 			updateJawaban(updateBody);
         });
@@ -377,6 +374,7 @@
                 "EXAM_AREA": $('#EXAM_AREA').val(),
                 "NDE_LEVEL": $('#NDE_LEVEL').val(),
                 "DURATION": $('#DURATION').val(),
+				"REFERENCE": $('#REFERENCE').val(),
                 "EXAM_TYPE": $('#EXAM_TYPE').val(),
                 "MAX_SCORE": $('#MAX_SCORE').val(),
                 "RULES": $('#RULES').val()
@@ -472,6 +470,7 @@
                 $('#EXAM_TYPE').val(response.EXAM_TYPE);
                 $('#DURATION').val(response.DURATION);
                 $('#MAX_SCORE').val(response.MAX_SCORE);
+                $('#REFERENCE').val(response.REFERENCE);
                 $('#RULES').val(response.RULES);
                 $('#NDE_LEVEL').val(response.NDE_LEVEL);
             }
@@ -616,21 +615,17 @@
     }
 
     function editJawaban(id) {
-        document.getElementById('VALUETRUE').checked = false;
-        document.getElementById('VALUEFALSE').checked = false;
+        // document.getElementById('VALUETRUE').checked = false;
+        // document.getElementById('VALUEFALSE').checked = false;
 		var elementID = document.getElementById('jawaban' + id);
 		var content = elementID.getAttribute('data-content');
-		var abjad = elementID.getAttribute('data-code');
-		var value = elementID.getAttribute('data-value');
-		$('#ABJAD').val(abjad);
 		$('#ANSWER').val(content);
-		$('#VALUE').val(value);
 		document.getElementById('updateJawaban').setAttribute('data-id', id);
-        if (value == 1) {
-		    document.getElementById('VALUETRUE').checked = true;
-		} else {
-		    document.getElementById('VALUEFALSE').checked = true;
-		}
+        // if (value == 1) {
+		//     document.getElementById('VALUETRUE').checked = true;
+		// } else {
+		//     document.getElementById('VALUEFALSE').checked = true;
+		// }
 		document.getElementById('update-answer-section').removeAttribute('hidden');
     }
 

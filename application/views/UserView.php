@@ -359,7 +359,7 @@
 				    window.location.reload();
 				// }
             }
-        })
+        });
     }
 
     function cancelUpdate() {
@@ -406,10 +406,14 @@
 
     function pushToData(item) {
         var avatar = item.AVATAR;
-        var btn  = '<div class="btn-group">' +
-            '<button data-email="' + item.EMAIL + '" data-avatar="' + avatar + '" data-username="' + item.USERNAME + '" data-company="' + item.COMPANY + '" data-companyloc="' + item.COMPANY_LOCATION + '" data-name="' + item.NAME + '" class="btn-info edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
-            '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ID + ')"><i class="ion-close"></i></button>' +
-            '</div>';
+        var btn = '';
+        btn += '<div class="btn-group">';
+        btn += '<button data-email="' + item.EMAIL + '" data-avatar="' + avatar + '" data-username="' + item.USERNAME + '" data-company="' + item.COMPANY + '" data-companyloc="' + item.COMPANY_LOCATION + '" data-name="' + item.NAME + '" class="btn-info edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>';
+        btn += '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ID + ')"><i class="ion-close"></i></button>';
+        if (item.LOGSTATUS === 1) {
+            btn += '<button class="btn-warning logoutButton" onclick="forceLogout(' + item.USER_ID + ')"><i class="ion-log-out"></i></button>';
+		}
+        btn += '</div>';
         var temp = [
             item.USERNAME,
             item.NAME,
@@ -421,6 +425,25 @@
         ];
         data.push(temp);
     }
+
+    function forceLogout(userid) {
+        $.ajax({
+            url: '<?=base_url("User/logoutPeserta/"); ?>' + userid,
+            type: 'POST',
+            success: function (res) {
+                console.log(res);
+                Swal.fire(
+                    'LOGOUT!',
+                    'This user has been logout from current device',
+                    'success'
+                );
+                // if (res.status === 'success') {
+                window.location.reload();
+                // }
+            }
+        });
+    }
+
 </Script>
 <!-- /.content-wrapper -->
 <?php $this->load->view('parts/footer'); ?>

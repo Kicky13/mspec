@@ -115,7 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<h5>:</h5>
 					</div>
 					<div class="col-md-6">
-						<h5>N/A</h5>
+						<h5><?= $main['REFERENCE'] == '' || $main['REFERENCE'] === null ? 'N/A' : $main['REFERENCE']; ?></h5>
 					</div>
 				</div>
 			</div>
@@ -172,7 +172,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<h5>:</h5>
 					</div>
 					<div class="col-md-6">
-						<h5>MSS Surabaya</h5>
+						<h5><?= $main['EVENT_LOCATION'] == '' || $main['EVENT_LOCATION'] === null ? 'N/A' : $main['EVENT_LOCATION']; ?></h5>
 					</div>
 				</div>
 				<div class="row">
@@ -195,8 +195,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</div>
 					<div class="col-md-6">
 						<h5><?= $main['EXAMINER']; ?></h5>
-						<h5>NDE-Level III</h5>
-						<h5>Cert. No 12345</h5>
 					</div>
 				</div>
 			</div>
@@ -213,7 +211,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<div class="row" style="margin-top: 2%">
 			<div class="col-md-1"></div>
 			<div class="col-md-5" id="leftsidex">
-				<table align="center" border="1" style="table-layout: fixed; min-width: 100%;">
+				<table align="center" border="1" style="min-width: 100%;">
 					<thead>
 						<tr>
 							<th></th>
@@ -225,11 +223,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<tbody>
 					<?php for($i = 0; $i < $main['SIDENUMBER']; $i++) {
 						echo '<tr>';
-						echo '<td id="no' . ($i + 1) . '">' . ($i + 1) .'</td>';
+						echo '<td style="padding-top: 2%; padding-bottom: 2%" id="no' . ($i + 1) . '">' . ($i + 1) .'</td>';
 						for ($j = 0; $j <= $main['TOTALCHOICE']; $j++) {
 							$idRadio = $i . '_' .$j;
-							echo '<td>
-									<input id="' . $idRadio .'" type="radio">
+							echo '<td style="padding-top: 2%; padding-bottom: 2%">
+									<input style="size: 2%" id="' . $idRadio .'" type="radio">
 								  </td>';
 						}
 						echo '</tr>';
@@ -250,10 +248,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<tbody>
 					<?php for($i = 0; $i < $main['SIDENUMBER']; $i++) {
 						echo '<tr>';
-						echo '<td id="no' . ($i + 1 + $main['SIDENUMBER']) .'">' . ($i + 1 + $main['SIDENUMBER']) .'</td>';
+						echo '<td style="padding-top: 2%; padding-bottom: 2%" id="no' . ($i + 1 + $main['SIDENUMBER']) .'">' . ($i + 1 + $main['SIDENUMBER']) .'</td>';
 						for ($j = 0; $j <= $main['TOTALCHOICE']; $j++) {
 							$idRadio = ($i + $main['SIDENUMBER']) . '_' .$j;
-							echo '<td>
+							echo '<td style="padding-bottom: 2%; padding-top: 2%">
 									<input id="' . $idRadio .'" type="radio">
 								  </td>';
 						}
@@ -303,7 +301,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     if (typeof data[i].ANSWER === 'number' || typeof data[i].ANSWER === 'bigint' || typeof data[i].ANSWER === 'string') {
                         document.getElementById(i + '_' + data[i].ANSWER).setAttribute('checked', true);
                         if (data[i].VALUE === false) {
-                            document.getElementById('no' + data[i].QUESTION_NO).setAttribute('style', 'color: red');
+                            document.getElementById('no' + data[i].QUESTION_NO).setAttribute('style', 'background-color: red');
 						}
 					}
 				}

@@ -12,9 +12,17 @@ class UserModel extends CI_Model {
 	}
 
 	function getSemuaPeserta() {
-		$data = $this->db->query('SELECT pm.*, um.USERNAME, um.PASSWORD FROM ' . $this->table . ' pm
-		JOIN ' . $this->userTable . ' um ON pm.USER_ID = um.ID');
-		return $data->result();
+		$data = $this->db->query('SELECT pm.*, um.USERNAME, um.PASSWORD, um.ACTIVE_TOKEN FROM ' . $this->table . ' pm
+		JOIN ' . $this->userTable . ' um ON pm.USER_ID = um.ID')->result_array();
+		for ($i = 0; $i < count($data); $i++) {
+			if ($data[$i]['ACTIVE_TOKEN'] === null) {
+				$logStatus = 0;
+			} else {
+				$logStatus = 1;
+			}
+			$data[$i]['LOGSTATUS'] = $logStatus;
+		}
+		return $data;
 	}
 
 	function getSemuaAdmin() {
@@ -241,7 +249,31 @@ class UserModel extends CI_Model {
 			$message = array(
 				'title' => 'DELETED!',
 				'content' => 'Data Has Been Deleted',
-				'type' => 'error'
+				'type' => 'success'
+			);
+		}
+		$response = array(
+			'status' => 200,
+			'message' => $message
+		);
+		return $response;
+	}
+
+	function logoutPeserta($userid) {
+		$message = array(
+			'title' => 'FAILED!',
+			'content' => 'Something Went Wrong',
+			'type' => 'error'
+		);
+		$content = array(
+			'ACTIVE_TOKEN' => null
+		);
+		$update = $this->db->where('ID', $userid)->update($this->userTable, $content);
+		if ($update) {
+			$message = array(
+				'title' => 'LOGOUT!',
+				'content' => 'User has been logout from current device',
+				'type' => 'success'
 			);
 		}
 		$response = array(

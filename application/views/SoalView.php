@@ -103,6 +103,10 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<label for="REFERENCE">Reference</label>
+								<input type="text" class="form-control" id="REFERENCE" name="REFERENCE" placeholder="Masukkan Referensi">
+							</div>
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
@@ -157,6 +161,7 @@
                 "EXAM_AREA": $('#EXAM_AREA').val(),
                 "NDE_LEVEL": $('#NDE_LEVEL').val(),
                 "DURATION": $('#DURATION').val(),
+				"REFERENCE": $('#REFERENCE').val(),
                 "EXAM_TYPE": $('#EXAM_TYPE').val(),
                 "MAX_SCORE": $('#MAX_SCORE').val(),
                 "RULES": $('#RULES').val()
@@ -175,6 +180,7 @@
                     $('#EXAM_AREA').val('');
                     $('#NDE_LEVEL').val('');
                     $('#DURATION').val('');
+                    $('#REFERENCE').val('');
                     $('#EXAM_TYPE').val('');
                     $('#MAX_SCORE').val('');
                     $('#RULES').val('');

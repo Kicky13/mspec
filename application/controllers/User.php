@@ -104,4 +104,9 @@ class User extends CI_Controller {
 		$data = $this->user->deletePeserta($id);
 		echo json_encode($data);
 	}
+
+	function logoutPeserta($userid) {
+		$data = $this->user->logoutPeserta($userid);
+		echo json_encode($data);
+	}
 }

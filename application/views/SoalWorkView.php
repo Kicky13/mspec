@@ -556,12 +556,99 @@ scratch. This page gets rid of all links and provides the needed markup only.
             };
 		    for (j = 0; j < answer.length; j++) {
 		        if (answer[j]['VALUE'] === '1') {
-		            numberkey['keyAnswer'] = j;
+		            numberkey['keyAnswer'] = decodeKunci(answer[j]['ALPHA'].toLowerCase());
 				}
 			}
 			kunci.push(numberkey);
 		}
     }
+
+    function decodeKunci(key) {
+        var resval;
+        switch (key) {
+            case 'a':
+                resval = 0;
+                break;
+            case 'b':
+                resval = 1;
+                break;
+            case 'c':
+                resval = 2;
+                break;
+            case 'd':
+                resval = 3;
+                break;
+            case 'e':
+                resval = 4;
+                break;
+            case 'f':
+                resval = 5;
+                break;
+            case 'g':
+                resval = 6;
+                break;
+            case 'h':
+                resval = 7;
+                break;
+            case 'i':
+                resval = 8;
+                break;
+            case 'j':
+                resval = 9;
+                break;
+            case 'k':
+                resval = 10;
+                break;
+            case 'l':
+                resval = 11;
+                break;
+            case 'm':
+                resval = 12;
+                break;
+            case 'n':
+                resval = 13;
+                break;
+            case 'o':
+                resval = 14;
+                break;
+            case 'p':
+                resval = 15;
+                break;
+            case 'q':
+                resval = 16;
+                break;
+            case 'r':
+                resval = 17;
+                break;
+            case 's':
+                resval = 18;
+                break;
+            case 't':
+                resval = 19;
+                break;
+            case 'u':
+                resval = 20;
+                break;
+            case 'v':
+                resval = 21;
+                break;
+            case 'w':
+                resval = 22;
+                break;
+            case 'x':
+                resval = 23;
+                break;
+            case 'y':
+                resval = 24;
+                break;
+            case 'z':
+                resval = 25;
+                break;
+            default:
+                resval = '';
+        }
+        return resval
+	}
 
     function doAnswer(number, id, jawaban) {
         var indexArray = number - 1;

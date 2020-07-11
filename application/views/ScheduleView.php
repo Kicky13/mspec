@@ -106,6 +106,10 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group">
+								<label for="EVENT_LOCATION">Lokasi Ujian</label>
+								<input type="text" class="form-control" id="EVENT_LOCATION" name="EVENT_LOCATION" placeholder="Masukkan Lokasi Ujian">
+							</div>
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer">
@@ -173,6 +177,7 @@
                 console.log(penguji);
                 formData.append('EVENT_TITLE', $('#EVENT_TITLE').val());
                 formData.append('EVENT_DATE', $('#EVENT_DATE').val());
+                formData.append('EVENT_LOCATION', $('#EVENT_LOCATION').val());
                 formData.append('EVENT_START', $('#EVENT_START').val());
                 formData.append('EVENT_END', $('#EVENT_END').val());
                 formData.append('EXAMINER', penguji);
@@ -197,6 +202,7 @@
                 formData.append('EVENT_DATE', $('#EVENT_DATE').val());
                 formData.append('EVENT_START', $('#EVENT_START').val());
                 formData.append('EVENT_END', $('#EVENT_END').val());
+                formData.append('EVENT_LOCATION', $('#EVENT_LOCATION').val());
                 formData.append('EXAMINER', penguji);
                 submitForm(formData);
             } else {
@@ -265,6 +271,7 @@
                     "EVENT_DATE": item.EVENT_DATE,
                     "EVENT_START": addSecond(item.EVENT_START),
                     "EVENT_END": addSecond(item.EVENT_END),
+					"EVENT_LOCATION": item.EVENT_LOCATION,
 					"ID_PENGUJI": item.ID_PENGUJI,
 					"NAMA_PENGUJI": item.NAMA_PENGUJI,
 					"ENCODE": item.ENCODE,
@@ -377,12 +384,17 @@
 		var evdate = $('#edit' + id).attr('data-date');
 		var starttime = $('#edit' + id).attr('data-starttime');
 		var endtime = $('#edit' + id).attr('data-endtime');
+		var location = $('#edit' + id).attr('data-location');
 		var penguji = $('#edit' + id).attr('data-penguji') + '-' + $('#edit' + id).attr('data-namapenguji');
 		console.log(endtime.slice(5));
+		if (location === 'null') {
+		    location = '';
+		}
 		$('#EVENT_TITLE').val(title);
 		$('#EVENT_DATE').val(dateFormatter(evdate));
 		$('#EVENT_START').val(timeFormatterAMPM(starttime));
 		$('#EVENT_END').val(timeFormatterAMPM(endtime));
+		$('#EVENT_LOCATION').val(location);
 		document.getElementById('EXAMINER').value = penguji;
 		document.getElementById('update').removeAttribute('hidden');
 		document.getElementById('update').setAttribute('data-id', id);
@@ -416,7 +428,7 @@
     function pushToData(item) {
         var btn  = '<div class="btn-group">' +
             '<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-id="' + item.ID + '" class="btn-info edit" id="look' + item.ID + '" onclick="gotoPesertaList(' + item.ID + ')"><i class="ion-person"></i></button>' +
-            '<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-id="' + item.ID + '" class="btn-success edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
+            '<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-location="' + item.EVENT_LOCATION + '" data-id="' + item.ID + '" class="btn-success edit" id="edit' + item.ID + '" onclick="editData(' + item.ID + ')"><i class="ion-android-create"></i></button>' +
             '<button class="btn-danger deleteButton" onclick="onClickDeactive(' + item.ID + ')"><i class="ion-close"></i></button>' +
             '</div>';
         var time = item.EVENT_START + ' / ' + item.EVENT_END;
