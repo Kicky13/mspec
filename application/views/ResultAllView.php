@@ -27,18 +27,20 @@
 				<div class="card">
 					<div class="card-header">
 						<h3>List Hasil Ujian</h3>
-						<button type="button" id="switchToAll" class="btn btn-flat">Switch to view All</button>
+						<button type="button" id="switchToExam" class="btn btn-flat">Switch to view by Exam</button>
 					</div>
 					<div class="card-body">
 						<table id="table1" class="table table-bordered table-striped">
 							<thead>
 							<tr>
 								<th>Kode Ujian</th>
-								<th>Nama Ujian</th>
-								<th>Tanggal</th>
-								<th>Jam Masuk / Jam Selesai</th>
-								<th>Nama Penguji</th>
-								<th>Action</th>
+								<th>Tanggal Ujian</th>
+								<th>Company</th>
+								<th>Name</th>
+								<th>Paket Soal</th>
+								<th>Exam Area</th>
+								<th>Exan Type</th>
+								<th>Nilai</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -46,11 +48,13 @@
 							<tfoot>
 							<tr>
 								<th>Kode Ujian</th>
-								<th>Nama Ujian</th>
-								<th>Tanggal</th>
-								<th>Jam Masuk / Jam Selesai</th>
-								<th>Nama Penguji</th>
-								<th>Action</th>
+								<th>Tanggal Ujian</th>
+								<th>Company</th>
+								<th>Name</th>
+								<th>Paket Soal</th>
+								<th>Exam Area</th>
+								<th>Exan Type</th>
+								<th>Nilai</th>
 							</tr>
 							</tfoot>
 						</table>
@@ -93,8 +97,8 @@
             format: 'LT'
         });
 
-        $('#switchToAll').click(function () {
-			gotoResultAllView();
+        $('#switchToExam').click(function () {
+			gotoResult();
         });
 
         $('#EVENT_DATE').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
@@ -117,7 +121,7 @@
 
     function getSemuaUjian() {
         $.ajax({
-            url: '<?=base_url('Result/getSemuaResult'); ?>',
+            url: '<?=base_url('Result/getSemuaResultByID'); ?>',
             type: 'GET',
             dataType: 'JSON',
             success: function (res) {
@@ -128,8 +132,12 @@
         });
     }
 
-    function gotoResultAllView() {
-        document.location.href = '<?=base_url('Result/showAll/'); ?>';
+    function gotoResult() {
+        document.location.href = '<?=base_url('Result/'); ?>';
+    }
+
+    function gotoDetailResult(encode) {
+        document.location.href = '<?=base_url('Result/detailResultPage/'); ?>' + encode;
     }
 
     function dateFormatter(date) {
@@ -156,22 +164,15 @@
     }
 
     function pushToData(item) {
-        var btn = '';
-        if (item.RESULTCOUNT > 0) {
-            btn  += '<div class="btn-group">' +
-                	'<button data-namapenguji="' + item.NAMA_PENGUJI + '" data-penguji="' + item.ID_PENGUJI + '" data-kode="' + item.ENCODE + '" data-title="' + item.EVENT_TITLE + '" data-date="' + item.EVENT_DATE + '" data-starttime="' + item.EVENT_START + '" data-endtime="' + item.EVENT_END + '" data-id="' + item.ID + '" class="btn-warning" id="look' + item.ID + '" onclick="gotoDetailResult(' + item.ID + ')"><i class="ion-ios-eye"></i></button>' +
-                	'</div>';
-		} else {
-            btn += '<p>No Result</p>'
-		}
-        var time = item.EVENT_START + ' / ' + item.EVENT_END;
         var temp = [
             item.ENCODE,
-            item.EVENT_TITLE,
             item.EVENT_DATE,
-            time,
-            item.NAMA_PENGUJI,
-            btn,
+            item.COMPANY,
+			item.NAME,
+            item.SHEET_NO,
+            item.EXAM_AREA,
+			item.EXAM_TYPE,
+			item.SCORE
         ];
         data.push(temp);
     }

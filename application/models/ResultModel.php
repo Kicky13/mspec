@@ -26,6 +26,21 @@ class ResultModel extends CI_Model {
 		return $response;
 	}
 
+	function getSemuaResultByID() {
+		$data = $this->db->select($this->table . '.*, ' . $this->mEvent . '.EVENT_DATE, ' . $this->mEvent . '.ENCODE, ' . $this->mEvent . '.EXAM_TYPE, ' . $this->mPart . '.NAME, ' . $this->mPart . '.COMPANY, ' . $this->mSheet . '.SHEET_NO, ' . $this->mSheet . '.EXAM_AREA, ')
+			->join($this->mEvent, $this->mEvent . '.ID = ' . $this->table . '.EVENT_ID')
+			->join($this->mPart, $this->mPart . '.ID = ' . $this->table . '.PARTICIPANT_ID')
+			->join($this->mSheet, $this->mSheet . '.ID = ' . $this->table . '.SHEET_ID')
+			->get($this->table)
+			->result_array();
+		$response = array(
+			"status" => 200,
+			"message" => '',
+			"data" => $data
+		);
+		return $response;
+	}
+
 	function getSemuaResultTest($id) {
 		$headResult = $this->db->select($this->event . '.*, ' . $this->mPart . '.NAME, ' . $this->mEvent . '.ENCODE, ' . $this->mSheet . '.METHOD, ' . $this->mEvent . '.EVENT_DATE')
 			->join($this->mPart, $this->mPart . '.ID = ' . $this->event . '.PARTICIPANT_ID')

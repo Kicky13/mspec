@@ -14,8 +14,17 @@ class Result extends CI_Controller {
 		$this->load->view('ResultView');
 	}
 
+	function showAll() {
+		$this->load->view('ResultAllView');
+	}
+
 	function getSemuaResult() {
 		$data = $this->result->getSemuaResult();
+		echo json_encode($data);
+	}
+
+	function getSemuaResultByID() {
+		$data = $this->result->getSemuaResultByID();
 		echo json_encode($data);
 	}
 

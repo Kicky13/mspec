@@ -10,6 +10,7 @@ class PaketModel extends CI_Model
 	protected $events = 'events';
 	protected $ljkHeader = 'ljk_header';
 	protected $ljk = 'ljk';
+	protected $log = 'log_json';
 
 	public function __construct()
 	{
@@ -158,6 +159,11 @@ class PaketModel extends CI_Model
 	}
 
 	function submitLjk($kunci, $sheet, $event, $participant, $duration, $answered, $isTrue, $isFalse, $maxScore) {
+		$insertLog = array(
+			'LOG_TYPE' => '',
+			'LOG_DATA' => $kunci
+		);
+		$this->db->insert($this->log, $insertLog);
 		$kunci = json_decode($kunci);
 		// Creating LJK Header
 		$totalSoal = count($kunci);

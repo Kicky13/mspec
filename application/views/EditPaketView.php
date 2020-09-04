@@ -67,21 +67,10 @@
 									</div>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="EXAM_TYPE">Examination Type</label>
-										<input type="text" class="form-control" id="EXAM_TYPE" name="EXAM_TYPE"
-											   placeholder="Masukkan Examination type">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="MAX_SCORE">Maximum Score</label>
-										<input type="text" placeholder="Maksimum score 100 apabila kolom ini dikosongi"
-											   class="form-control" id="MAX_SCORE" name="MAX_SCORE">
-									</div>
-								</div>
+							<div class="form-group">
+								<label for="MAX_SCORE">Maximum Score</label>
+								<input type="text" class="form-control" id="MAX_SCORE" name="MAX_SCORE"
+									   placeholder="Maksimum score 100 apabila kolom ini dikosongi">
 							</div>
 							<div class="form-group">
 								<label for="REFERENCE">Reference</label>
@@ -375,7 +364,6 @@
                 "NDE_LEVEL": $('#NDE_LEVEL').val(),
                 "DURATION": $('#DURATION').val(),
 				"REFERENCE": $('#REFERENCE').val(),
-                "EXAM_TYPE": $('#EXAM_TYPE').val(),
                 "MAX_SCORE": $('#MAX_SCORE').val(),
                 "RULES": $('#RULES').val()
             };
@@ -467,7 +455,6 @@
                 $('#SHEET_NO').val(response.SHEET_NO);
                 $('#METHOD').val(response.METHOD);
                 $('#EXAM_AREA').val(response.EXAM_AREA);
-                $('#EXAM_TYPE').val(response.EXAM_TYPE);
                 $('#DURATION').val(response.DURATION);
                 $('#MAX_SCORE').val(response.MAX_SCORE);
                 $('#REFERENCE').val(response.REFERENCE);

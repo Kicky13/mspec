@@ -144,6 +144,7 @@ class ScheduleModel extends CI_Model {
 			"EVENT_DATE" => $date,
 			"EVENT_START" => $startTime,
 			"EVENT_END" => $endTime,
+			"EXAM_TYPE" => $data['EXAM_TYPE'],
 			"EVENT_LOCATION" => $data['EVENT_LOCATION'],
 			"EXAMINER_ID" => $penguji[0]
 		);
@@ -177,6 +178,7 @@ class ScheduleModel extends CI_Model {
 			"EVENT_DATE" => $date,
 			"EVENT_START" => $startTime,
 			"EVENT_END" => $endTime,
+			"EXAM_TYPE" => $data['EXAM_TYPE'],
 			"EVENT_LOCATION" => $data['EVENT_LOCATION'],
 			"EXAMINER_ID" => $penguji[0]
 		);

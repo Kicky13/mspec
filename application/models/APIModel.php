@@ -12,6 +12,7 @@ class APIModel extends CI_Model {
 	protected $ques = 'question_master';
 	protected $ans = 'qchoice_master';
 	protected $pack = 'question_package';
+	protected $log = 'log_json';
 
 	public function __construct()
 	{
@@ -113,7 +114,7 @@ class APIModel extends CI_Model {
 
     function getTestInfo($postData) {
         $regid = $this->encryption->decrypt($postData['REGISTER_ID']);
-        $data = $this->db->select('events_master.ID, events_master.ENCODE, events_master.EVENT_TITLE as TITLE, events_master.EVENT_DATE as date, events_master.EVENT_START as startTime, events_master.EVENT_END as endTime, events_master.EXAMINER_ID, user_master.NAME as EXAMINER_NAME, qsheet_master.SHEET_NO, qsheet_master.METHOD, qsheet_master.EXAM_AREA, qsheet_master.NDE_LEVEL, qsheet_master.DURATION, qsheet_master.EXAM_TYPE, qsheet_master.MAX_SCORE, qsheet_master.RULES, qsheet_master.ID as SHEET_ID')
+        $data = $this->db->select('events_master.ID, events_master.ENCODE, events_master.EVENT_TITLE as TITLE, events_master.EVENT_DATE as date, events_master.EVENT_START as startTime, events_master.EVENT_END as endTime, events_master.EXAMINER_ID, user_master.NAME as EXAMINER_NAME, qsheet_master.SHEET_NO, qsheet_master.METHOD, qsheet_master.EXAM_AREA, qsheet_master.NDE_LEVEL, qsheet_master.DURATION, events_master.EXAM_TYPE, qsheet_master.MAX_SCORE, qsheet_master.RULES, qsheet_master.ID as SHEET_ID')
             ->join($this->abs, $this->abs . '.PARTICIPANT_ID = ' . $this->peserta . '.ID')
             ->join($this->event, $this->event . '.ID = ' . $this->abs . '.EVENT_ID')
             ->join($this->soal, $this->soal . '.ID = ' . $this->abs . '.SHEET_ID')
@@ -123,6 +124,7 @@ class APIModel extends CI_Model {
 			->where($this->event . '.ENCODE', $postData['encode'])
             ->get($this->peserta)
             ->result_array();
+        $query = $this->db->last_query();
         $event = array();
         if (count($data)) {
             $event = array(
@@ -177,12 +179,13 @@ class APIModel extends CI_Model {
             }
             $event['questionPackages'] = $paket;
         }
-        $last_query = $this->db->last_query();
+//        $last_query = $this->db->last_query();
         return $callback = array(
             'status' => 200,
             'message' => '',
             'errorMessage' => '',
-            'data' => $event
+            'data' => $event,
+			'query' => $query
         );
     }
 
@@ -199,6 +202,11 @@ class APIModel extends CI_Model {
     }
 
     function submitLjk($data) {
+		$insertJson = array(
+			'LOG_TYPE' => 'exam log',
+			'LOG_DATA' => $data['data']
+		);
+		$this->db->insert($this->log, $insertJson);
 		$data = json_decode($data['data']);
 		$testID = $this->encryption->decrypt($data->testId);
 		$userID = $this->encryption->decrypt($data->userId);
@@ -211,7 +219,7 @@ class APIModel extends CI_Model {
 		$right = $data->right;
 		$wrong = $data->wrong;
 		$totalquest = count($this->db->where('QSHEET_ID', $paket['ID'])->get($this->pack)->result_array());
-		$answered = $totalquest - $data->unanswered;
+		$answered = $right + $wrong;
 		$score = $right / $totalquest * $paket['MAX_SCORE'];
 		$duration = $this->timeFormat($data->timeSpent);
 		$this->db->trans_start();
@@ -277,6 +285,8 @@ class APIModel extends CI_Model {
 		$seconds = floor($mils/1000);
 		$minutes = floor($seconds/60);
 		$hours = floor($minutes/60);
+		$seconds = $seconds - ($minutes * 60);
+		$minutes = $minutes - ($hours * 60);
 		if ($hours > 0) {
 			$time = $hours . ' Hours ' . $minutes . ' minutes ' . $seconds . ' seconds';
 		} else {

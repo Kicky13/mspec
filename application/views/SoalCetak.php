@@ -87,17 +87,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<h5 style="text-align: left"><?= $header['DURATION']; ?> Minutes</h5>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<h5>Examination Type</h5>
-					</div>
-					<div class="col-md-1">
-						<h5>:</h5>
-					</div>
-					<div style="align-items: flex-start" class="col-md-7">
-						<h5 style="text-align: left"><?= $header['EXAM_TYPE']; ?></h5>
-					</div>
-				</div>
 			</div>
 			<div class="col-md-2"></div>
 		</div>

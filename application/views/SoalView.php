@@ -37,7 +37,6 @@
 								<th>Exam Area</th>
 								<th>NDE Level</th>
 								<th>Duration</th>
-								<th>Exam Type</th>
 								<th>Max Score</th>
 								<th>Action</th>
 							</tr>
@@ -51,7 +50,6 @@
 								<th>Exam Area</th>
 								<th>NDE Level</th>
 								<th>Duration</th>
-								<th>Exam Type</th>
 								<th>Max Score</th>
 								<th>Action</th>
 							</tr>
@@ -107,19 +105,9 @@
 								<label for="REFERENCE">Reference</label>
 								<input type="text" class="form-control" id="REFERENCE" name="REFERENCE" placeholder="Masukkan Referensi">
 							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="EXAM_TYPE">Examination Type</label>
-										<input type="text" class="form-control" id="EXAM_TYPE" name="EXAM_TYPE" placeholder="Masukkan Examination type">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="MAX_SCORE">Maximum Score</label>
-										<input type="text" placeholder="Maksimum score 100 apabila kolom ini dikosongi" class="form-control" id="MAX_SCORE" name="MAX_SCORE">
-									</div>
-								</div>
+							<div class="form-group">
+								<label for="MAX_SCORE">Maximum Score</label>
+								<input type="text" class="form-control" id="MAX_SCORE" name="MAX_SCORE" placeholder="Maksimum score 100 apabila kolom ini dikosongi">
 							</div>
 							<div class="form-group">
 								<label for="RULES">Rules</label>
@@ -162,7 +150,6 @@
                 "NDE_LEVEL": $('#NDE_LEVEL').val(),
                 "DURATION": $('#DURATION').val(),
 				"REFERENCE": $('#REFERENCE').val(),
-                "EXAM_TYPE": $('#EXAM_TYPE').val(),
                 "MAX_SCORE": $('#MAX_SCORE').val(),
                 "RULES": $('#RULES').val()
 			};
@@ -181,7 +168,6 @@
                     $('#NDE_LEVEL').val('');
                     $('#DURATION').val('');
                     $('#REFERENCE').val('');
-                    $('#EXAM_TYPE').val('');
                     $('#MAX_SCORE').val('');
                     $('#RULES').val('');
                 },
@@ -267,7 +253,6 @@
 			item.EXAM_AREA,
 			item.NDE_LEVEL,
 			item.DURATION + ' Minutes',
-			item.EXAM_TYPE,
 			item.MAX_SCORE,
 			btn,
 		];
